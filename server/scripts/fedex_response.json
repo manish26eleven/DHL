@@ -1,0 +1,1878 @@
+{
+  "transactionId": "68b7ef99-0824-4fc6-9dfe-58f5322d3223",
+  "output": {
+    "alerts": [
+      {
+        "code": "ORIGIN.STATEORPROVINCECODE.CHANGED",
+        "message": "The origin state/province code has been changed.",
+        "alertType": "NOTE"
+      },
+      {
+        "code": "DESTINATION.STATEORPROVINCECODE.CHANGED",
+        "message": "The destination state/province code has been changed.",
+        "alertType": "NOTE"
+      }
+    ],
+    "rateReplyDetails": [
+      {
+        "serviceType": "FEDEX_INTERNATIONAL_PRIORITY_EXPRESS",
+        "serviceName": "FedEx International Priority® Express",
+        "packagingType": "YOUR_PACKAGING",
+        "commit": {
+          "dateDetail": {
+            "dayOfWeek": "Sat",
+            "dayFormat": "2026-02-07T12:00:00"
+          },
+          "commodityName": "PARTS, MACHINE",
+          "deliveryMessages": [
+            "BY NOON IF NO CUSTOMS DELAY"
+          ],
+          "requiredDocuments": [
+            "INTERNATIONAL_AIRWAY_BILL",
+            "COMMERCIAL_INVOICE"
+          ],
+          "derivedOriginDetail": {
+            "countryCode": "IN",
+            "stateOrProvinceCode": "DL",
+            "postalCode": "110001",
+            "serviceArea": "AA",
+            "locationId": "DELCP",
+            "locationNumber": 0
+          },
+          "derivedDestinationDetail": {
+            "countryCode": "US",
+            "stateOrProvinceCode": "NY",
+            "postalCode": "10001",
+            "serviceArea": "A1",
+            "locationId": "TSSA ",
+            "locationNumber": 0,
+            "airportId": "EWR"
+          },
+          "saturdayDelivery": true
+        },
+        "customerMessages": [
+          {
+            "code": "SERVICE.TYPE.INTERNATIONAL.MESSAGE",
+            "message": "Rate does not include duties & taxes, clearance entry fees or other import fees.  The payor of duties/taxes/fees will be responsible for any applicable Clearance Entry Fees."
+          },
+          {
+            "code": "REQUEST.IS.COMPLETED",
+            "message": "Request Is Completed."
+          },
+          {
+            "code": "SATURDAY.DELIVERY.AVAILABLE",
+            "message": "Special handling required for Saturday Delivery."
+          }
+        ],
+        "ratedShipmentDetails": [
+          {
+            "rateType": "ACCOUNT",
+            "ratedWeightMethod": "ACTUAL",
+            "totalDiscounts": 0,
+            "totalBaseCharge": 48.81,
+            "totalNetCharge": 74.85,
+            "totalVatCharge": 0,
+            "totalNetFedExCharge": 74.85,
+            "totalDutiesAndTaxes": 0,
+            "totalNetChargeWithDutiesAndTaxes": 74.85,
+            "totalDutiesTaxesAndFees": 0,
+            "totalAncillaryFeesAndTaxes": 0,
+            "shipmentRateDetail": {
+              "rateZone": "G",
+              "dimDivisor": 166,
+              "fuelSurchargePercent": 31.5,
+              "totalSurcharges": 30.48,
+              "totalFreightDiscount": 4.44,
+              "freightDiscount": [
+                {
+                  "type": "VOLUME",
+                  "description": "Volume discount",
+                  "amount": 4.44,
+                  "percent": 9.09
+                }
+              ],
+              "surCharges": [
+                {
+                  "type": "SATURDAY_DELIVERY",
+                  "description": "Saturday Delivery",
+                  "level": "SHIPMENT",
+                  "amount": 5.78
+                },
+                {
+                  "type": "OUT_OF_DELIVERY_AREA",
+                  "description": "Out of Delivery Area Tier A",
+                  "level": "SHIPMENT",
+                  "amount": 2.19
+                },
+                {
+                  "type": "FUEL",
+                  "description": "Fuel Surcharge",
+                  "level": "SHIPMENT",
+                  "amount": 17.93
+                },
+                {
+                  "type": "DEMAND",
+                  "description": "Demand Surcharge",
+                  "level": "SHIPMENT",
+                  "amount": 4.58
+                }
+              ],
+              "pricingCode": "",
+              "currencyExchangeRate": {
+                "fromCurrency": "INR",
+                "intoCurrency": "GBP",
+                "rate": 0.01
+              },
+              "totalBillingWeight": {
+                "units": "KG",
+                "value": 5
+              },
+              "dimDivisorType": "PRODUCT",
+              "currency": "GBP",
+              "rateScale": "IN001OFG_2A_YOUR_PACKAGING",
+              "totalRateScaleWeight": {
+                "units": "KG",
+                "value": 5
+              }
+            },
+            "ratedPackages": [
+              {
+                "groupNumber": 0,
+                "effectiveNetDiscount": 0,
+                "packageRateDetail": {
+                  "rateType": "PAYOR_ACCOUNT_SHIPMENT",
+                  "ratedWeightMethod": "ACTUAL",
+                  "baseCharge": 48.81,
+                  "netFreight": 44.37,
+                  "totalSurcharges": 30.48,
+                  "netFedExCharge": 74.85,
+                  "totalTaxes": 0,
+                  "netCharge": 74.85,
+                  "totalRebates": 0,
+                  "billingWeight": {
+                    "units": "KG",
+                    "value": 5
+                  },
+                  "totalFreightDiscounts": 4.44,
+                  "freightDiscounts": [
+                    {
+                      "type": "VOLUME",
+                      "description": "Volume",
+                      "amount": 4.44,
+                      "percent": 9.09
+                    }
+                  ],
+                  "surcharges": [
+                    {
+                      "type": "SATURDAY_DELIVERY",
+                      "description": "Saturday Delivery",
+                      "level": "SHIPMENT",
+                      "amount": 5.78
+                    },
+                    {
+                      "type": "OUT_OF_DELIVERY_AREA",
+                      "description": "Out of Delivery Area Tier A",
+                      "level": "SHIPMENT",
+                      "amount": 2.19
+                    },
+                    {
+                      "type": "FUEL",
+                      "description": "Fuel Surcharge",
+                      "level": "SHIPMENT",
+                      "amount": 17.93
+                    },
+                    {
+                      "type": "DEMAND",
+                      "description": "Demand Surcharge",
+                      "level": "SHIPMENT",
+                      "amount": 4.58
+                    }
+                  ],
+                  "currency": "GBP"
+                },
+                "sequenceNumber": 1
+              }
+            ],
+            "currency": "GBP"
+          }
+        ],
+        "operationalDetail": {
+          "originLocationIds": [
+            "DELCP"
+          ],
+          "originLocationNumbers": [
+            0
+          ],
+          "originServiceAreas": [
+            "AA"
+          ],
+          "destinationLocationIds": [
+            "TSSA "
+          ],
+          "destinationLocationNumbers": [
+            0
+          ],
+          "destinationServiceAreas": [
+            "A1"
+          ],
+          "destinationLocationStateOrProvinceCodes": [
+            "NY"
+          ],
+          "deliveryDate": "2026-02-07T12:00:00",
+          "deliveryDay": "SAT",
+          "commitDate": "2026-02-07T12:00:00",
+          "commitDays": [
+            "SAT"
+          ],
+          "ineligibleForMoneyBackGuarantee": false,
+          "astraDescription": "IPE",
+          "originPostalCodes": [
+            "110001"
+          ],
+          "stateOrProvinceCodes": [
+            "DL"
+          ],
+          "countryCodes": [
+            "IN"
+          ],
+          "airportId": "EWR",
+          "serviceCode": "2A",
+          "destinationPostalCode": "10001"
+        },
+        "signatureOptionType": "SERVICE_DEFAULT",
+        "serviceDescription": {
+          "serviceId": "EP1000000299",
+          "serviceType": "FEDEX_INTERNATIONAL_PRIORITY_EXPRESS",
+          "code": "2A",
+          "names": [
+            {
+              "type": "long",
+              "encoding": "utf-8",
+              "value": "FedEx International Priority® Express"
+            },
+            {
+              "type": "long",
+              "encoding": "ascii",
+              "value": "FedEx International Priority Express"
+            },
+            {
+              "type": "medium",
+              "encoding": "utf-8",
+              "value": "FedEx Intl Priority Express"
+            },
+            {
+              "type": "medium",
+              "encoding": "ascii",
+              "value": "FedEx Intl Priority Express"
+            },
+            {
+              "type": "short",
+              "encoding": "utf-8",
+              "value": "IPM"
+            },
+            {
+              "type": "short",
+              "encoding": "ascii",
+              "value": "IPM"
+            },
+            {
+              "type": "abbrv",
+              "encoding": "ascii",
+              "value": "LO"
+            }
+          ],
+          "serviceCategory": "parcel",
+          "description": "International Priority Express (IP EXP)",
+          "astraDescription": "IPE"
+        },
+        "deliveryStation": "TSSA "
+      },
+      {
+        "serviceType": "FEDEX_INTERNATIONAL_PRIORITY",
+        "serviceName": "FedEx International Priority®",
+        "packagingType": "YOUR_PACKAGING",
+        "commit": {
+          "dateDetail": {
+            "dayOfWeek": "Sat",
+            "dayFormat": "2026-02-07T17:00:00"
+          },
+          "commodityName": "PARTS, MACHINE",
+          "deliveryMessages": [
+            " 5:00 P.M. IF NO CUSTOMS DELAY"
+          ],
+          "requiredDocuments": [
+            "INTERNATIONAL_AIRWAY_BILL",
+            "COMMERCIAL_INVOICE"
+          ],
+          "derivedOriginDetail": {
+            "countryCode": "IN",
+            "stateOrProvinceCode": "DL",
+            "postalCode": "110001",
+            "serviceArea": "AA",
+            "locationId": "DELCP",
+            "locationNumber": 0
+          },
+          "derivedDestinationDetail": {
+            "countryCode": "US",
+            "stateOrProvinceCode": "NY",
+            "postalCode": "10001",
+            "serviceArea": "A1",
+            "locationId": "TSSA ",
+            "locationNumber": 0,
+            "airportId": "EWR"
+          },
+          "saturdayDelivery": true
+        },
+        "customerMessages": [
+          {
+            "code": "SERVICE.TYPE.INTERNATIONAL.MESSAGE",
+            "message": "Rate does not include duties & taxes, clearance entry fees or other import fees.  The payor of duties/taxes/fees will be responsible for any applicable Clearance Entry Fees."
+          },
+          {
+            "code": "REQUEST.IS.COMPLETED",
+            "message": "Request Is Completed."
+          },
+          {
+            "code": "SATURDAY.DELIVERY.AVAILABLE",
+            "message": "Special handling required for Saturday Delivery."
+          }
+        ],
+        "ratedShipmentDetails": [
+          {
+            "rateType": "ACCOUNT",
+            "ratedWeightMethod": "ACTUAL",
+            "totalDiscounts": 0,
+            "totalBaseCharge": 48.81,
+            "totalNetCharge": 74.85,
+            "totalVatCharge": 0,
+            "totalNetFedExCharge": 74.85,
+            "totalDutiesAndTaxes": 0,
+            "totalNetChargeWithDutiesAndTaxes": 74.85,
+            "totalDutiesTaxesAndFees": 0,
+            "totalAncillaryFeesAndTaxes": 0,
+            "shipmentRateDetail": {
+              "rateZone": "G",
+              "dimDivisor": 166,
+              "fuelSurchargePercent": 31.5,
+              "totalSurcharges": 30.48,
+              "totalFreightDiscount": 4.44,
+              "freightDiscount": [
+                {
+                  "type": "VOLUME",
+                  "description": "Volume discount",
+                  "amount": 4.44,
+                  "percent": 9.09
+                }
+              ],
+              "surCharges": [
+                {
+                  "type": "SATURDAY_DELIVERY",
+                  "description": "Saturday Delivery",
+                  "level": "SHIPMENT",
+                  "amount": 5.78
+                },
+                {
+                  "type": "OUT_OF_DELIVERY_AREA",
+                  "description": "Out of Delivery Area Tier A",
+                  "level": "SHIPMENT",
+                  "amount": 2.19
+                },
+                {
+                  "type": "FUEL",
+                  "description": "Fuel Surcharge",
+                  "level": "SHIPMENT",
+                  "amount": 17.93
+                },
+                {
+                  "type": "DEMAND",
+                  "description": "Demand Surcharge",
+                  "level": "SHIPMENT",
+                  "amount": 4.58
+                }
+              ],
+              "pricingCode": "",
+              "currencyExchangeRate": {
+                "fromCurrency": "INR",
+                "intoCurrency": "GBP",
+                "rate": 0.01
+              },
+              "totalBillingWeight": {
+                "units": "KG",
+                "value": 5
+              },
+              "dimDivisorType": "PRODUCT",
+              "currency": "GBP",
+              "rateScale": "IN001OFG_2P_YOUR_PACKAGING",
+              "totalRateScaleWeight": {
+                "units": "KG",
+                "value": 5
+              }
+            },
+            "ratedPackages": [
+              {
+                "groupNumber": 0,
+                "effectiveNetDiscount": 0,
+                "packageRateDetail": {
+                  "rateType": "PAYOR_ACCOUNT_SHIPMENT",
+                  "ratedWeightMethod": "ACTUAL",
+                  "baseCharge": 48.81,
+                  "netFreight": 44.37,
+                  "totalSurcharges": 30.48,
+                  "netFedExCharge": 74.85,
+                  "totalTaxes": 0,
+                  "netCharge": 74.85,
+                  "totalRebates": 0,
+                  "billingWeight": {
+                    "units": "KG",
+                    "value": 5
+                  },
+                  "totalFreightDiscounts": 4.44,
+                  "freightDiscounts": [
+                    {
+                      "type": "VOLUME",
+                      "description": "Volume",
+                      "amount": 4.44,
+                      "percent": 9.09
+                    }
+                  ],
+                  "surcharges": [
+                    {
+                      "type": "SATURDAY_DELIVERY",
+                      "description": "Saturday Delivery",
+                      "level": "SHIPMENT",
+                      "amount": 5.78
+                    },
+                    {
+                      "type": "OUT_OF_DELIVERY_AREA",
+                      "description": "Out of Delivery Area Tier A",
+                      "level": "SHIPMENT",
+                      "amount": 2.19
+                    },
+                    {
+                      "type": "FUEL",
+                      "description": "Fuel Surcharge",
+                      "level": "SHIPMENT",
+                      "amount": 17.93
+                    },
+                    {
+                      "type": "DEMAND",
+                      "description": "Demand Surcharge",
+                      "level": "SHIPMENT",
+                      "amount": 4.58
+                    }
+                  ],
+                  "currency": "GBP"
+                },
+                "sequenceNumber": 1
+              }
+            ],
+            "currency": "GBP"
+          }
+        ],
+        "operationalDetail": {
+          "originLocationIds": [
+            "DELCP"
+          ],
+          "originLocationNumbers": [
+            0
+          ],
+          "originServiceAreas": [
+            "AA"
+          ],
+          "destinationLocationIds": [
+            "TSSA "
+          ],
+          "destinationLocationNumbers": [
+            0
+          ],
+          "destinationServiceAreas": [
+            "A1"
+          ],
+          "destinationLocationStateOrProvinceCodes": [
+            "NY"
+          ],
+          "deliveryDate": "2026-02-07T17:00:00",
+          "deliveryDay": "SAT",
+          "commitDate": "2026-02-07T17:00:00",
+          "commitDays": [
+            "SAT"
+          ],
+          "ineligibleForMoneyBackGuarantee": false,
+          "astraDescription": "IP EOD",
+          "originPostalCodes": [
+            "110001"
+          ],
+          "stateOrProvinceCodes": [
+            "DL"
+          ],
+          "countryCodes": [
+            "IN"
+          ],
+          "airportId": "EWR",
+          "serviceCode": "2P",
+          "destinationPostalCode": "10001"
+        },
+        "signatureOptionType": "SERVICE_DEFAULT",
+        "serviceDescription": {
+          "serviceId": "EP1000000300",
+          "serviceType": "FEDEX_INTERNATIONAL_PRIORITY",
+          "code": "2P",
+          "names": [
+            {
+              "type": "long",
+              "encoding": "utf-8",
+              "value": "FedEx International Priority®"
+            },
+            {
+              "type": "long",
+              "encoding": "ascii",
+              "value": "FedEx International Priority"
+            },
+            {
+              "type": "medium",
+              "encoding": "utf-8",
+              "value": "FedEx International Priority"
+            },
+            {
+              "type": "medium",
+              "encoding": "ascii",
+              "value": "FedEx International Priority"
+            },
+            {
+              "type": "short",
+              "encoding": "utf-8",
+              "value": "IPED"
+            },
+            {
+              "type": "short",
+              "encoding": "ascii",
+              "value": "IPED"
+            },
+            {
+              "type": "abbrv",
+              "encoding": "ascii",
+              "value": "OA"
+            }
+          ],
+          "serviceCategory": "parcel",
+          "description": "International Priority EOD (IP EOD)",
+          "astraDescription": "IP EOD"
+        },
+        "deliveryStation": "TSSA "
+      },
+      {
+        "serviceType": "INTERNATIONAL_FIRST",
+        "serviceName": "FedEx International First®",
+        "packagingType": "YOUR_PACKAGING",
+        "commit": {
+          "dateDetail": {
+            "dayOfWeek": "Mon",
+            "dayFormat": "2026-02-09T08:00:00"
+          },
+          "commodityName": "PARTS, MACHINE",
+          "delayDetails": [
+            {
+              "date": "2026-02-07",
+              "dayOfWeek": "SAT",
+              "level": "COUNTRY",
+              "point": "DESTINATION",
+              "type": "NO_SERVICE_AREA_DELIVERY",
+              "description": "NO SVC AREA DELIVERY"
+            },
+            {
+              "date": "2026-02-08",
+              "dayOfWeek": "SUN",
+              "level": "COUNTRY",
+              "point": "DESTINATION",
+              "type": "NO_SERVICE_AREA_DELIVERY",
+              "description": "NO SVC AREA DELIVERY"
+            }
+          ],
+          "deliveryMessages": [
+            " 8:00 A.M. IF NO CUSTOMS DELAY"
+          ],
+          "requiredDocuments": [
+            "INTERNATIONAL_AIRWAY_BILL",
+            "COMMERCIAL_INVOICE"
+          ],
+          "derivedOriginDetail": {
+            "countryCode": "IN",
+            "stateOrProvinceCode": "DL",
+            "postalCode": "110001",
+            "serviceArea": "AA",
+            "locationId": "DELCP",
+            "locationNumber": 0
+          },
+          "derivedDestinationDetail": {
+            "countryCode": "US",
+            "stateOrProvinceCode": "NY",
+            "postalCode": "10001",
+            "serviceArea": "A1",
+            "locationId": "TSSA ",
+            "locationNumber": 0,
+            "airportId": "EWR"
+          },
+          "saturdayDelivery": false
+        },
+        "customerMessages": [
+          {
+            "code": "SERVICE.TYPE.INTERNATIONAL.MESSAGE",
+            "message": "Rate does not include duties & taxes, clearance entry fees or other import fees.  The payor of duties/taxes/fees will be responsible for any applicable Clearance Entry Fees."
+          },
+          {
+            "code": "REQUEST.IS.COMPLETED",
+            "message": "Request Is Completed."
+          }
+        ],
+        "ratedShipmentDetails": [
+          {
+            "rateType": "ACCOUNT",
+            "ratedWeightMethod": "ACTUAL",
+            "totalDiscounts": 0,
+            "totalBaseCharge": 69.56,
+            "totalNetCharge": 100.37,
+            "totalVatCharge": 0,
+            "totalNetFedExCharge": 100.37,
+            "totalDutiesAndTaxes": 0,
+            "totalNetChargeWithDutiesAndTaxes": 100.37,
+            "totalDutiesTaxesAndFees": 0,
+            "totalAncillaryFeesAndTaxes": 0,
+            "shipmentRateDetail": {
+              "rateZone": "IN001O",
+              "dimDivisor": 166,
+              "fuelSurchargePercent": 31.5,
+              "totalSurcharges": 30.81,
+              "totalFreightDiscount": 0,
+              "surCharges": [
+                {
+                  "type": "OUT_OF_DELIVERY_AREA",
+                  "description": "Out of Delivery Area Tier A",
+                  "level": "SHIPMENT",
+                  "amount": 2.19
+                },
+                {
+                  "type": "FUEL",
+                  "description": "Fuel Surcharge",
+                  "level": "SHIPMENT",
+                  "amount": 24.04
+                },
+                {
+                  "type": "DEMAND",
+                  "description": "Demand Surcharge",
+                  "level": "SHIPMENT",
+                  "amount": 4.58
+                }
+              ],
+              "pricingCode": "",
+              "currencyExchangeRate": {
+                "fromCurrency": "INR",
+                "intoCurrency": "GBP",
+                "rate": 0.01
+              },
+              "totalBillingWeight": {
+                "units": "KG",
+                "value": 5
+              },
+              "dimDivisorType": "PRODUCT",
+              "currency": "GBP",
+              "rateScale": "IN001OFG_06_YOUR_PACKAGING",
+              "totalRateScaleWeight": {
+                "units": "KG",
+                "value": 5
+              }
+            },
+            "ratedPackages": [
+              {
+                "groupNumber": 0,
+                "effectiveNetDiscount": 0,
+                "packageRateDetail": {
+                  "rateType": "PAYOR_ACCOUNT_SHIPMENT",
+                  "ratedWeightMethod": "ACTUAL",
+                  "baseCharge": 69.56,
+                  "netFreight": 69.56,
+                  "totalSurcharges": 30.81,
+                  "netFedExCharge": 100.37,
+                  "totalTaxes": 0,
+                  "netCharge": 100.37,
+                  "totalRebates": 0,
+                  "billingWeight": {
+                    "units": "KG",
+                    "value": 5
+                  },
+                  "totalFreightDiscounts": 0,
+                  "surcharges": [
+                    {
+                      "type": "OUT_OF_DELIVERY_AREA",
+                      "description": "Out of Delivery Area Tier A",
+                      "level": "SHIPMENT",
+                      "amount": 2.19
+                    },
+                    {
+                      "type": "FUEL",
+                      "description": "Fuel Surcharge",
+                      "level": "SHIPMENT",
+                      "amount": 24.04
+                    },
+                    {
+                      "type": "DEMAND",
+                      "description": "Demand Surcharge",
+                      "level": "SHIPMENT",
+                      "amount": 4.58
+                    }
+                  ],
+                  "currency": "GBP"
+                },
+                "sequenceNumber": 1
+              }
+            ],
+            "currency": "GBP"
+          }
+        ],
+        "operationalDetail": {
+          "originLocationIds": [
+            "DELCP"
+          ],
+          "originLocationNumbers": [
+            0
+          ],
+          "originServiceAreas": [
+            "AA"
+          ],
+          "destinationLocationIds": [
+            "TSSA "
+          ],
+          "destinationLocationNumbers": [
+            0
+          ],
+          "destinationServiceAreas": [
+            "A1"
+          ],
+          "destinationLocationStateOrProvinceCodes": [
+            "NY"
+          ],
+          "deliveryDate": "2026-02-09T08:00:00",
+          "deliveryDay": "MON",
+          "commitDate": "2026-02-09T08:00:00",
+          "commitDays": [
+            "MON"
+          ],
+          "ineligibleForMoneyBackGuarantee": false,
+          "astraDescription": "INTL1ST",
+          "originPostalCodes": [
+            "110001"
+          ],
+          "stateOrProvinceCodes": [
+            "DL"
+          ],
+          "countryCodes": [
+            "IN"
+          ],
+          "airportId": "EWR",
+          "serviceCode": "06",
+          "destinationPostalCode": "10001"
+        },
+        "signatureOptionType": "SERVICE_DEFAULT",
+        "serviceDescription": {
+          "serviceId": "EP1000000007",
+          "serviceType": "INTERNATIONAL_FIRST",
+          "code": "06",
+          "names": [
+            {
+              "type": "long",
+              "encoding": "utf-8",
+              "value": "FedEx International First®"
+            },
+            {
+              "type": "long",
+              "encoding": "ascii",
+              "value": "FedEx International First"
+            },
+            {
+              "type": "medium",
+              "encoding": "utf-8",
+              "value": "FedEx International First®"
+            },
+            {
+              "type": "medium",
+              "encoding": "ascii",
+              "value": "FedEx International First"
+            },
+            {
+              "type": "short",
+              "encoding": "utf-8",
+              "value": "FO"
+            },
+            {
+              "type": "short",
+              "encoding": "ascii",
+              "value": "FO"
+            },
+            {
+              "type": "abbrv",
+              "encoding": "ascii",
+              "value": "FO"
+            }
+          ],
+          "serviceCategory": "parcel",
+          "description": "International First",
+          "astraDescription": "INTL1ST"
+        },
+        "deliveryStation": "TSSA "
+      },
+      {
+        "serviceType": "FEDEX_INTERNATIONAL_PRIORITY_EXPRESS",
+        "serviceName": "FedEx International Priority® Express",
+        "packagingType": "YOUR_PACKAGING",
+        "commit": {
+          "dateDetail": {
+            "dayOfWeek": "Mon",
+            "dayFormat": "2026-02-09T10:30:00"
+          },
+          "commodityName": "PARTS, MACHINE",
+          "delayDetails": [
+            {
+              "date": "2026-02-07",
+              "dayOfWeek": "SAT",
+              "level": "COUNTRY",
+              "point": "DESTINATION",
+              "type": "WEEKEND_SPECIAL",
+              "description": "WEEKEND"
+            },
+            {
+              "date": "2026-02-08",
+              "dayOfWeek": "SUN",
+              "level": "COUNTRY",
+              "point": "DESTINATION",
+              "type": "NO_SERVICE_AREA_DELIVERY",
+              "description": "NO SVC AREA DELIVERY"
+            }
+          ],
+          "deliveryMessages": [
+            "10:30 A.M. IF NO CUSTOMS DELAY"
+          ],
+          "requiredDocuments": [
+            "INTERNATIONAL_AIRWAY_BILL",
+            "COMMERCIAL_INVOICE"
+          ],
+          "derivedOriginDetail": {
+            "countryCode": "IN",
+            "stateOrProvinceCode": "DL",
+            "postalCode": "110001",
+            "serviceArea": "AA",
+            "locationId": "DELCP",
+            "locationNumber": 0
+          },
+          "derivedDestinationDetail": {
+            "countryCode": "US",
+            "stateOrProvinceCode": "NY",
+            "postalCode": "10001",
+            "serviceArea": "A1",
+            "locationId": "TSSA ",
+            "locationNumber": 0,
+            "airportId": "EWR"
+          },
+          "saturdayDelivery": false
+        },
+        "customerMessages": [
+          {
+            "code": "SERVICE.TYPE.INTERNATIONAL.MESSAGE",
+            "message": "Rate does not include duties & taxes, clearance entry fees or other import fees.  The payor of duties/taxes/fees will be responsible for any applicable Clearance Entry Fees."
+          },
+          {
+            "code": "SATURDAY.DELIVERY.AVAILABLE",
+            "message": "Special handling required for Saturday Delivery."
+          },
+          {
+            "code": "REQUEST.IS.COMPLETED",
+            "message": "Request Is Completed."
+          }
+        ],
+        "ratedShipmentDetails": [
+          {
+            "rateType": "ACCOUNT",
+            "ratedWeightMethod": "ACTUAL",
+            "totalDiscounts": 0,
+            "totalBaseCharge": 48.81,
+            "totalNetCharge": 67.25,
+            "totalVatCharge": 0,
+            "totalNetFedExCharge": 67.25,
+            "totalDutiesAndTaxes": 0,
+            "totalNetChargeWithDutiesAndTaxes": 67.25,
+            "totalDutiesTaxesAndFees": 0,
+            "totalAncillaryFeesAndTaxes": 0,
+            "shipmentRateDetail": {
+              "rateZone": "G",
+              "dimDivisor": 166,
+              "fuelSurchargePercent": 31.5,
+              "totalSurcharges": 22.88,
+              "totalFreightDiscount": 4.44,
+              "freightDiscount": [
+                {
+                  "type": "VOLUME",
+                  "description": "Volume discount",
+                  "amount": 4.44,
+                  "percent": 9.09
+                }
+              ],
+              "surCharges": [
+                {
+                  "type": "OUT_OF_DELIVERY_AREA",
+                  "description": "Out of Delivery Area Tier A",
+                  "level": "SHIPMENT",
+                  "amount": 2.19
+                },
+                {
+                  "type": "FUEL",
+                  "description": "Fuel Surcharge",
+                  "level": "SHIPMENT",
+                  "amount": 16.11
+                },
+                {
+                  "type": "DEMAND",
+                  "description": "Demand Surcharge",
+                  "level": "SHIPMENT",
+                  "amount": 4.58
+                }
+              ],
+              "pricingCode": "",
+              "currencyExchangeRate": {
+                "fromCurrency": "INR",
+                "intoCurrency": "GBP",
+                "rate": 0.01
+              },
+              "totalBillingWeight": {
+                "units": "KG",
+                "value": 5
+              },
+              "dimDivisorType": "PRODUCT",
+              "currency": "GBP",
+              "rateScale": "IN001OFG_2A_YOUR_PACKAGING",
+              "totalRateScaleWeight": {
+                "units": "KG",
+                "value": 5
+              }
+            },
+            "ratedPackages": [
+              {
+                "groupNumber": 0,
+                "effectiveNetDiscount": 0,
+                "packageRateDetail": {
+                  "rateType": "PAYOR_ACCOUNT_SHIPMENT",
+                  "ratedWeightMethod": "ACTUAL",
+                  "baseCharge": 48.81,
+                  "netFreight": 44.37,
+                  "totalSurcharges": 22.88,
+                  "netFedExCharge": 67.25,
+                  "totalTaxes": 0,
+                  "netCharge": 67.25,
+                  "totalRebates": 0,
+                  "billingWeight": {
+                    "units": "KG",
+                    "value": 5
+                  },
+                  "totalFreightDiscounts": 4.44,
+                  "freightDiscounts": [
+                    {
+                      "type": "VOLUME",
+                      "description": "Volume",
+                      "amount": 4.44,
+                      "percent": 9.09
+                    }
+                  ],
+                  "surcharges": [
+                    {
+                      "type": "OUT_OF_DELIVERY_AREA",
+                      "description": "Out of Delivery Area Tier A",
+                      "level": "SHIPMENT",
+                      "amount": 2.19
+                    },
+                    {
+                      "type": "FUEL",
+                      "description": "Fuel Surcharge",
+                      "level": "SHIPMENT",
+                      "amount": 16.11
+                    },
+                    {
+                      "type": "DEMAND",
+                      "description": "Demand Surcharge",
+                      "level": "SHIPMENT",
+                      "amount": 4.58
+                    }
+                  ],
+                  "currency": "GBP"
+                },
+                "sequenceNumber": 1
+              }
+            ],
+            "currency": "GBP"
+          }
+        ],
+        "operationalDetail": {
+          "originLocationIds": [
+            "DELCP"
+          ],
+          "originLocationNumbers": [
+            0
+          ],
+          "originServiceAreas": [
+            "AA"
+          ],
+          "destinationLocationIds": [
+            "TSSA "
+          ],
+          "destinationLocationNumbers": [
+            0
+          ],
+          "destinationServiceAreas": [
+            "A1"
+          ],
+          "destinationLocationStateOrProvinceCodes": [
+            "NY"
+          ],
+          "deliveryDate": "2026-02-09T10:30:00",
+          "deliveryDay": "MON",
+          "commitDate": "2026-02-09T10:30:00",
+          "commitDays": [
+            "MON"
+          ],
+          "ineligibleForMoneyBackGuarantee": false,
+          "astraDescription": "IPE",
+          "originPostalCodes": [
+            "110001"
+          ],
+          "stateOrProvinceCodes": [
+            "DL"
+          ],
+          "countryCodes": [
+            "IN"
+          ],
+          "airportId": "EWR",
+          "serviceCode": "2A",
+          "destinationPostalCode": "10001"
+        },
+        "signatureOptionType": "SERVICE_DEFAULT",
+        "serviceDescription": {
+          "serviceId": "EP1000000299",
+          "serviceType": "FEDEX_INTERNATIONAL_PRIORITY_EXPRESS",
+          "code": "2A",
+          "names": [
+            {
+              "type": "long",
+              "encoding": "utf-8",
+              "value": "FedEx International Priority® Express"
+            },
+            {
+              "type": "long",
+              "encoding": "ascii",
+              "value": "FedEx International Priority Express"
+            },
+            {
+              "type": "medium",
+              "encoding": "utf-8",
+              "value": "FedEx Intl Priority Express"
+            },
+            {
+              "type": "medium",
+              "encoding": "ascii",
+              "value": "FedEx Intl Priority Express"
+            },
+            {
+              "type": "short",
+              "encoding": "utf-8",
+              "value": "IPM"
+            },
+            {
+              "type": "short",
+              "encoding": "ascii",
+              "value": "IPM"
+            },
+            {
+              "type": "abbrv",
+              "encoding": "ascii",
+              "value": "LO"
+            }
+          ],
+          "serviceCategory": "parcel",
+          "description": "International Priority Express (IP EXP)",
+          "astraDescription": "IPE"
+        },
+        "deliveryStation": "TSSA "
+      },
+      {
+        "serviceType": "FEDEX_INTERNATIONAL_PRIORITY",
+        "serviceName": "FedEx International Priority®",
+        "packagingType": "YOUR_PACKAGING",
+        "commit": {
+          "dateDetail": {
+            "dayOfWeek": "Mon",
+            "dayFormat": "2026-02-09T17:00:00"
+          },
+          "commodityName": "PARTS, MACHINE",
+          "delayDetails": [
+            {
+              "date": "2026-02-07",
+              "dayOfWeek": "SAT",
+              "level": "COUNTRY",
+              "point": "DESTINATION",
+              "type": "WEEKEND_SPECIAL",
+              "description": "WEEKEND"
+            },
+            {
+              "date": "2026-02-08",
+              "dayOfWeek": "SUN",
+              "level": "COUNTRY",
+              "point": "DESTINATION",
+              "type": "NO_SERVICE_AREA_DELIVERY",
+              "description": "NO SVC AREA DELIVERY"
+            }
+          ],
+          "deliveryMessages": [
+            " 5:00 P.M. IF NO CUSTOMS DELAY"
+          ],
+          "requiredDocuments": [
+            "INTERNATIONAL_AIRWAY_BILL",
+            "COMMERCIAL_INVOICE"
+          ],
+          "derivedOriginDetail": {
+            "countryCode": "IN",
+            "stateOrProvinceCode": "DL",
+            "postalCode": "110001",
+            "serviceArea": "AA",
+            "locationId": "DELCP",
+            "locationNumber": 0
+          },
+          "derivedDestinationDetail": {
+            "countryCode": "US",
+            "stateOrProvinceCode": "NY",
+            "postalCode": "10001",
+            "serviceArea": "A1",
+            "locationId": "TSSA ",
+            "locationNumber": 0,
+            "airportId": "EWR"
+          },
+          "saturdayDelivery": false
+        },
+        "customerMessages": [
+          {
+            "code": "SERVICE.TYPE.INTERNATIONAL.MESSAGE",
+            "message": "Rate does not include duties & taxes, clearance entry fees or other import fees.  The payor of duties/taxes/fees will be responsible for any applicable Clearance Entry Fees."
+          },
+          {
+            "code": "SATURDAY.DELIVERY.AVAILABLE",
+            "message": "Special handling required for Saturday Delivery."
+          },
+          {
+            "code": "REQUEST.IS.COMPLETED",
+            "message": "Request Is Completed."
+          }
+        ],
+        "ratedShipmentDetails": [
+          {
+            "rateType": "ACCOUNT",
+            "ratedWeightMethod": "ACTUAL",
+            "totalDiscounts": 0,
+            "totalBaseCharge": 48.81,
+            "totalNetCharge": 67.25,
+            "totalVatCharge": 0,
+            "totalNetFedExCharge": 67.25,
+            "totalDutiesAndTaxes": 0,
+            "totalNetChargeWithDutiesAndTaxes": 67.25,
+            "totalDutiesTaxesAndFees": 0,
+            "totalAncillaryFeesAndTaxes": 0,
+            "shipmentRateDetail": {
+              "rateZone": "G",
+              "dimDivisor": 166,
+              "fuelSurchargePercent": 31.5,
+              "totalSurcharges": 22.88,
+              "totalFreightDiscount": 4.44,
+              "freightDiscount": [
+                {
+                  "type": "VOLUME",
+                  "description": "Volume discount",
+                  "amount": 4.44,
+                  "percent": 9.09
+                }
+              ],
+              "surCharges": [
+                {
+                  "type": "OUT_OF_DELIVERY_AREA",
+                  "description": "Out of Delivery Area Tier A",
+                  "level": "SHIPMENT",
+                  "amount": 2.19
+                },
+                {
+                  "type": "FUEL",
+                  "description": "Fuel Surcharge",
+                  "level": "SHIPMENT",
+                  "amount": 16.11
+                },
+                {
+                  "type": "DEMAND",
+                  "description": "Demand Surcharge",
+                  "level": "SHIPMENT",
+                  "amount": 4.58
+                }
+              ],
+              "pricingCode": "",
+              "currencyExchangeRate": {
+                "fromCurrency": "INR",
+                "intoCurrency": "GBP",
+                "rate": 0.01
+              },
+              "totalBillingWeight": {
+                "units": "KG",
+                "value": 5
+              },
+              "dimDivisorType": "PRODUCT",
+              "currency": "GBP",
+              "rateScale": "IN001OFG_2P_YOUR_PACKAGING",
+              "totalRateScaleWeight": {
+                "units": "KG",
+                "value": 5
+              }
+            },
+            "ratedPackages": [
+              {
+                "groupNumber": 0,
+                "effectiveNetDiscount": 0,
+                "packageRateDetail": {
+                  "rateType": "PAYOR_ACCOUNT_SHIPMENT",
+                  "ratedWeightMethod": "ACTUAL",
+                  "baseCharge": 48.81,
+                  "netFreight": 44.37,
+                  "totalSurcharges": 22.88,
+                  "netFedExCharge": 67.25,
+                  "totalTaxes": 0,
+                  "netCharge": 67.25,
+                  "totalRebates": 0,
+                  "billingWeight": {
+                    "units": "KG",
+                    "value": 5
+                  },
+                  "totalFreightDiscounts": 4.44,
+                  "freightDiscounts": [
+                    {
+                      "type": "VOLUME",
+                      "description": "Volume",
+                      "amount": 4.44,
+                      "percent": 9.09
+                    }
+                  ],
+                  "surcharges": [
+                    {
+                      "type": "OUT_OF_DELIVERY_AREA",
+                      "description": "Out of Delivery Area Tier A",
+                      "level": "SHIPMENT",
+                      "amount": 2.19
+                    },
+                    {
+                      "type": "FUEL",
+                      "description": "Fuel Surcharge",
+                      "level": "SHIPMENT",
+                      "amount": 16.11
+                    },
+                    {
+                      "type": "DEMAND",
+                      "description": "Demand Surcharge",
+                      "level": "SHIPMENT",
+                      "amount": 4.58
+                    }
+                  ],
+                  "currency": "GBP"
+                },
+                "sequenceNumber": 1
+              }
+            ],
+            "currency": "GBP"
+          }
+        ],
+        "operationalDetail": {
+          "originLocationIds": [
+            "DELCP"
+          ],
+          "originLocationNumbers": [
+            0
+          ],
+          "originServiceAreas": [
+            "AA"
+          ],
+          "destinationLocationIds": [
+            "TSSA "
+          ],
+          "destinationLocationNumbers": [
+            0
+          ],
+          "destinationServiceAreas": [
+            "A1"
+          ],
+          "destinationLocationStateOrProvinceCodes": [
+            "NY"
+          ],
+          "deliveryDate": "2026-02-09T17:00:00",
+          "deliveryDay": "MON",
+          "commitDate": "2026-02-09T17:00:00",
+          "commitDays": [
+            "MON"
+          ],
+          "ineligibleForMoneyBackGuarantee": false,
+          "astraDescription": "IP EOD",
+          "originPostalCodes": [
+            "110001"
+          ],
+          "stateOrProvinceCodes": [
+            "DL"
+          ],
+          "countryCodes": [
+            "IN"
+          ],
+          "airportId": "EWR",
+          "serviceCode": "2P",
+          "destinationPostalCode": "10001"
+        },
+        "signatureOptionType": "SERVICE_DEFAULT",
+        "serviceDescription": {
+          "serviceId": "EP1000000300",
+          "serviceType": "FEDEX_INTERNATIONAL_PRIORITY",
+          "code": "2P",
+          "names": [
+            {
+              "type": "long",
+              "encoding": "utf-8",
+              "value": "FedEx International Priority®"
+            },
+            {
+              "type": "long",
+              "encoding": "ascii",
+              "value": "FedEx International Priority"
+            },
+            {
+              "type": "medium",
+              "encoding": "utf-8",
+              "value": "FedEx International Priority"
+            },
+            {
+              "type": "medium",
+              "encoding": "ascii",
+              "value": "FedEx International Priority"
+            },
+            {
+              "type": "short",
+              "encoding": "utf-8",
+              "value": "IPED"
+            },
+            {
+              "type": "short",
+              "encoding": "ascii",
+              "value": "IPED"
+            },
+            {
+              "type": "abbrv",
+              "encoding": "ascii",
+              "value": "OA"
+            }
+          ],
+          "serviceCategory": "parcel",
+          "description": "International Priority EOD (IP EOD)",
+          "astraDescription": "IP EOD"
+        },
+        "deliveryStation": "TSSA "
+      },
+      {
+        "serviceType": "FEDEX_INTERNATIONAL_CONNECT_PLUS",
+        "serviceName": "FedEx International Connect Plus",
+        "packagingType": "YOUR_PACKAGING",
+        "commit": {
+          "dateDetail": {
+            "dayOfWeek": "Tue",
+            "dayFormat": "2026-02-10T22:00:00"
+          },
+          "commodityName": "PARTS, MACHINE",
+          "deliveryMessages": [
+            "10:00 P.M. IF NO CUSTOMS DELAY"
+          ],
+          "requiredDocuments": [
+            "INTERNATIONAL_AIRWAY_BILL",
+            "COMMERCIAL_INVOICE"
+          ],
+          "derivedOriginDetail": {
+            "countryCode": "IN",
+            "stateOrProvinceCode": "DL",
+            "postalCode": "110001",
+            "serviceArea": "AA",
+            "locationId": "DELCP",
+            "locationNumber": 0
+          },
+          "derivedDestinationDetail": {
+            "countryCode": "US",
+            "stateOrProvinceCode": "NY",
+            "postalCode": "10001",
+            "serviceArea": "A1",
+            "locationId": "TSSA ",
+            "locationNumber": 0,
+            "airportId": "EWR"
+          },
+          "saturdayDelivery": false
+        },
+        "customerMessages": [
+          {
+            "code": "SERVICE.TYPE.INTERNATIONAL.MESSAGE",
+            "message": "Rate does not include duties & taxes, clearance entry fees or other import fees.  The payor of duties/taxes/fees will be responsible for any applicable Clearance Entry Fees."
+          },
+          {
+            "code": "REQUEST.IS.COMPLETED",
+            "message": "Request Is Completed."
+          }
+        ],
+        "ratedShipmentDetails": [
+          {
+            "rateType": "ACCOUNT",
+            "ratedWeightMethod": "ACTUAL",
+            "totalDiscounts": 0,
+            "totalBaseCharge": 169.38,
+            "totalNetCharge": 232.96,
+            "totalVatCharge": 0,
+            "totalNetFedExCharge": 232.96,
+            "totalDutiesAndTaxes": 0,
+            "totalNetChargeWithDutiesAndTaxes": 232.96,
+            "totalDutiesTaxesAndFees": 0,
+            "totalAncillaryFeesAndTaxes": 0,
+            "shipmentRateDetail": {
+              "rateZone": "G",
+              "dimDivisor": 139,
+              "fuelSurchargePercent": 31.5,
+              "totalSurcharges": 63.58,
+              "totalFreightDiscount": 0,
+              "surCharges": [
+                {
+                  "type": "OUT_OF_DELIVERY_AREA",
+                  "description": "Out of Delivery Area Tier A",
+                  "level": "SHIPMENT",
+                  "amount": 2.65
+                },
+                {
+                  "type": "FUEL",
+                  "description": "Fuel Surcharge",
+                  "level": "SHIPMENT",
+                  "amount": 55.64
+                },
+                {
+                  "type": "DEMAND",
+                  "description": "Demand Surcharge",
+                  "level": "SHIPMENT",
+                  "amount": 4.58
+                },
+                {
+                  "type": "ANCILLARY_FEE",
+                  "description": "US Inbound Processing Fee",
+                  "level": "SHIPMENT",
+                  "amount": 0.71
+                }
+              ],
+              "pricingCode": "",
+              "currencyExchangeRate": {
+                "fromCurrency": "USD",
+                "intoCurrency": "GBP",
+                "rate": 0.75
+              },
+              "totalBillingWeight": {
+                "units": "KG",
+                "value": 5
+              },
+              "dimDivisorType": "COUNTRY",
+              "currency": "GBP",
+              "rateScale": "IN001OFG_EC_CUSTOMER_PACKAGING",
+              "totalRateScaleWeight": {
+                "units": "KG",
+                "value": 5
+              }
+            },
+            "ratedPackages": [
+              {
+                "groupNumber": 0,
+                "effectiveNetDiscount": 0,
+                "packageRateDetail": {
+                  "rateType": "PAYOR_ACCOUNT_SHIPMENT",
+                  "ratedWeightMethod": "ACTUAL",
+                  "baseCharge": 169.38,
+                  "netFreight": 169.38,
+                  "totalSurcharges": 63.58,
+                  "netFedExCharge": 232.96,
+                  "totalTaxes": 0,
+                  "netCharge": 232.96,
+                  "totalRebates": 0,
+                  "billingWeight": {
+                    "units": "KG",
+                    "value": 5
+                  },
+                  "totalFreightDiscounts": 0,
+                  "surcharges": [
+                    {
+                      "type": "OUT_OF_DELIVERY_AREA",
+                      "description": "Out of Delivery Area Tier A",
+                      "level": "SHIPMENT",
+                      "amount": 2.65
+                    },
+                    {
+                      "type": "FUEL",
+                      "description": "Fuel Surcharge",
+                      "level": "SHIPMENT",
+                      "amount": 55.64
+                    },
+                    {
+                      "type": "DEMAND",
+                      "description": "Demand Surcharge",
+                      "level": "SHIPMENT",
+                      "amount": 4.58
+                    },
+                    {
+                      "type": "ANCILLARY_FEE",
+                      "description": "US Inbound Processing Fee",
+                      "level": "SHIPMENT",
+                      "amount": 0.71
+                    }
+                  ],
+                  "currency": "GBP"
+                },
+                "sequenceNumber": 1
+              }
+            ],
+            "currency": "GBP"
+          }
+        ],
+        "operationalDetail": {
+          "originLocationIds": [
+            "DELCP"
+          ],
+          "originLocationNumbers": [
+            0
+          ],
+          "originServiceAreas": [
+            "AA"
+          ],
+          "destinationLocationIds": [
+            "TSSA "
+          ],
+          "destinationLocationNumbers": [
+            0
+          ],
+          "destinationServiceAreas": [
+            "A1"
+          ],
+          "destinationLocationStateOrProvinceCodes": [
+            "NY"
+          ],
+          "deliveryDate": "2026-02-10T22:00:00",
+          "deliveryDay": "TUE",
+          "commitDate": "2026-02-10T22:00:00",
+          "commitDays": [
+            "TUE"
+          ],
+          "ineligibleForMoneyBackGuarantee": false,
+          "astraDescription": "ICP",
+          "originPostalCodes": [
+            "110001"
+          ],
+          "stateOrProvinceCodes": [
+            "DL"
+          ],
+          "countryCodes": [
+            "IN"
+          ],
+          "airportId": "EWR",
+          "serviceCode": "EC",
+          "destinationPostalCode": "10001"
+        },
+        "signatureOptionType": "SERVICE_DEFAULT",
+        "serviceDescription": {
+          "serviceId": "EP1000000305",
+          "serviceType": "FEDEX_INTERNATIONAL_CONNECT_PLUS",
+          "code": "EC",
+          "names": [
+            {
+              "type": "long",
+              "encoding": "utf-8",
+              "value": "FedEx International Connect Plus"
+            },
+            {
+              "type": "long",
+              "encoding": "ascii",
+              "value": "FedEx International Connect Plus"
+            },
+            {
+              "type": "medium",
+              "encoding": "utf-8",
+              "value": "FedEx Intl Connect Plus"
+            },
+            {
+              "type": "medium",
+              "encoding": "ascii",
+              "value": "FedEx Intl Connect Plus"
+            },
+            {
+              "type": "short",
+              "encoding": "utf-8",
+              "value": "ICP"
+            },
+            {
+              "type": "short",
+              "encoding": "ascii",
+              "value": "ICP"
+            },
+            {
+              "type": "abbrv",
+              "encoding": "ascii",
+              "value": "MN"
+            }
+          ],
+          "serviceCategory": "parcel",
+          "description": "International Connect Plus",
+          "astraDescription": "ICP"
+        },
+        "deliveryStation": "TSSA "
+      },
+      {
+        "serviceType": "INTERNATIONAL_ECONOMY",
+        "serviceName": "FedEx International Economy®",
+        "packagingType": "YOUR_PACKAGING",
+        "commit": {
+          "dateDetail": {
+            "dayOfWeek": "Thu",
+            "dayFormat": "2026-02-12T17:00:00"
+          },
+          "commodityName": "PARTS, MACHINE",
+          "deliveryMessages": [
+            " 5:00 P.M. IF NO CUSTOMS DELAY"
+          ],
+          "requiredDocuments": [
+            "INTERNATIONAL_AIRWAY_BILL",
+            "COMMERCIAL_INVOICE"
+          ],
+          "derivedOriginDetail": {
+            "countryCode": "IN",
+            "stateOrProvinceCode": "DL",
+            "postalCode": "110001",
+            "serviceArea": "AA",
+            "locationId": "DELCP",
+            "locationNumber": 0
+          },
+          "derivedDestinationDetail": {
+            "countryCode": "US",
+            "stateOrProvinceCode": "NY",
+            "postalCode": "10001",
+            "serviceArea": "A1",
+            "locationId": "TSSA ",
+            "locationNumber": 0,
+            "airportId": "EWR"
+          },
+          "saturdayDelivery": false
+        },
+        "customerMessages": [
+          {
+            "code": "SERVICE.TYPE.INTERNATIONAL.MESSAGE",
+            "message": "Rate does not include duties & taxes, clearance entry fees or other import fees.  The payor of duties/taxes/fees will be responsible for any applicable Clearance Entry Fees."
+          },
+          {
+            "code": "REQUEST.IS.COMPLETED",
+            "message": "Request Is Completed."
+          }
+        ],
+        "ratedShipmentDetails": [
+          {
+            "rateType": "ACCOUNT",
+            "ratedWeightMethod": "ACTUAL",
+            "totalDiscounts": 0,
+            "totalBaseCharge": 35.02,
+            "totalNetCharge": 54.95,
+            "totalVatCharge": 0,
+            "totalNetFedExCharge": 54.95,
+            "totalDutiesAndTaxes": 0,
+            "totalNetChargeWithDutiesAndTaxes": 54.95,
+            "totalDutiesTaxesAndFees": 0,
+            "totalAncillaryFeesAndTaxes": 0,
+            "shipmentRateDetail": {
+              "rateZone": "IN001O",
+              "dimDivisor": 166,
+              "fuelSurchargePercent": 31.5,
+              "totalSurcharges": 19.93,
+              "totalFreightDiscount": 0,
+              "surCharges": [
+                {
+                  "type": "OUT_OF_DELIVERY_AREA",
+                  "description": "Out of Delivery Area Tier A",
+                  "level": "SHIPMENT",
+                  "amount": 2.19
+                },
+                {
+                  "type": "FUEL",
+                  "description": "Fuel Surcharge",
+                  "level": "SHIPMENT",
+                  "amount": 13.16
+                },
+                {
+                  "type": "DEMAND",
+                  "description": "Demand Surcharge",
+                  "level": "SHIPMENT",
+                  "amount": 4.58
+                }
+              ],
+              "pricingCode": "",
+              "currencyExchangeRate": {
+                "fromCurrency": "INR",
+                "intoCurrency": "GBP",
+                "rate": 0.01
+              },
+              "totalBillingWeight": {
+                "units": "KG",
+                "value": 5
+              },
+              "dimDivisorType": "PRODUCT",
+              "currency": "GBP",
+              "rateScale": "IN001OFG_04_YOUR_PACKAGING",
+              "totalRateScaleWeight": {
+                "units": "KG",
+                "value": 5
+              }
+            },
+            "ratedPackages": [
+              {
+                "groupNumber": 0,
+                "effectiveNetDiscount": 0,
+                "packageRateDetail": {
+                  "rateType": "PAYOR_ACCOUNT_SHIPMENT",
+                  "ratedWeightMethod": "ACTUAL",
+                  "baseCharge": 35.02,
+                  "netFreight": 35.02,
+                  "totalSurcharges": 19.93,
+                  "netFedExCharge": 54.95,
+                  "totalTaxes": 0,
+                  "netCharge": 54.95,
+                  "totalRebates": 0,
+                  "billingWeight": {
+                    "units": "KG",
+                    "value": 5
+                  },
+                  "totalFreightDiscounts": 0,
+                  "surcharges": [
+                    {
+                      "type": "OUT_OF_DELIVERY_AREA",
+                      "description": "Out of Delivery Area Tier A",
+                      "level": "SHIPMENT",
+                      "amount": 2.19
+                    },
+                    {
+                      "type": "FUEL",
+                      "description": "Fuel Surcharge",
+                      "level": "SHIPMENT",
+                      "amount": 13.16
+                    },
+                    {
+                      "type": "DEMAND",
+                      "description": "Demand Surcharge",
+                      "level": "SHIPMENT",
+                      "amount": 4.58
+                    }
+                  ],
+                  "currency": "GBP"
+                },
+                "sequenceNumber": 1
+              }
+            ],
+            "currency": "GBP"
+          }
+        ],
+        "operationalDetail": {
+          "originLocationIds": [
+            "DELCP"
+          ],
+          "originLocationNumbers": [
+            0
+          ],
+          "originServiceAreas": [
+            "AA"
+          ],
+          "destinationLocationIds": [
+            "TSSA "
+          ],
+          "destinationLocationNumbers": [
+            0
+          ],
+          "destinationServiceAreas": [
+            "A1"
+          ],
+          "destinationLocationStateOrProvinceCodes": [
+            "NY"
+          ],
+          "deliveryDate": "2026-02-12T17:00:00",
+          "deliveryDay": "THU",
+          "commitDate": "2026-02-12T17:00:00",
+          "commitDays": [
+            "THU"
+          ],
+          "ineligibleForMoneyBackGuarantee": false,
+          "astraDescription": "IE",
+          "originPostalCodes": [
+            "110001"
+          ],
+          "stateOrProvinceCodes": [
+            "DL"
+          ],
+          "countryCodes": [
+            "IN"
+          ],
+          "airportId": "EWR",
+          "serviceCode": "04",
+          "destinationPostalCode": "10001"
+        },
+        "signatureOptionType": "SERVICE_DEFAULT",
+        "serviceDescription": {
+          "serviceId": "EP1000000004",
+          "serviceType": "INTERNATIONAL_ECONOMY",
+          "code": "04",
+          "names": [
+            {
+              "type": "long",
+              "encoding": "utf-8",
+              "value": "FedEx International Economy®"
+            },
+            {
+              "type": "long",
+              "encoding": "ascii",
+              "value": "FedEx International Economy"
+            },
+            {
+              "type": "medium",
+              "encoding": "utf-8",
+              "value": "FedEx International Economy®"
+            },
+            {
+              "type": "medium",
+              "encoding": "ascii",
+              "value": "FedEx International Economy"
+            },
+            {
+              "type": "short",
+              "encoding": "utf-8",
+              "value": "IE"
+            },
+            {
+              "type": "short",
+              "encoding": "ascii",
+              "value": "IE"
+            },
+            {
+              "type": "abbrv",
+              "encoding": "ascii",
+              "value": "IE"
+            }
+          ],
+          "serviceCategory": "parcel",
+          "description": "International Economy",
+          "astraDescription": "IE"
+        },
+        "deliveryStation": "TSSA "
+      }
+    ],
+    "quoteDate": "2026-02-05",
+    "encoded": false
+  }
+}

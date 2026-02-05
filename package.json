@@ -1,20 +1,20 @@
 {
-  "name": "dhl",
+  "name": "dhl-rate-calculator",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
- 
-  
+  "description": "DHL & FedEx Rate Calculator",
   "scripts": {
-    "install-all": "npm install && cd server && npm install && cd ../client && npm install",
+    "install:all": "cd client && npm install && cd ../server && npm install",
     "build": "cd client && npm run build",
-    "start": "node server/index.js"
+    "start:server": "cd server && NODE_ENV=production node index.js",
+    "dev:server": "cd server && node index.js",
+    "dev:client": "cd client && npm start"
   },
-
-
-  "keywords": [],
+  "keywords": [
+    "dhl",
+    "fedex",
+    "shipping",
+    "rates"
+  ],
   "author": "",
-  "license": "ISC",
-  "type": "commonjs"
+  "license": "ISC"
 }
-

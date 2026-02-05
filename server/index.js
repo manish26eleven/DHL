@@ -9,6 +9,7 @@ const jwt = require("jsonwebtoken");
 const db = require("./db/sqlite");
 const multer = require("multer");
 const XLSX = require("xlsx");
+// const { CLIENT_RENEG_LIMIT } = require("tls");
 require("dotenv").config();
 // const PORT = process.env.PORT || 5000;
 const upload = multer({
@@ -19,7 +20,7 @@ const upload = multer({
   fileFilter: (req, file, cb) => {
     if (
       file.mimetype ===
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
       file.mimetype === "application/vnd.ms-excel"
     ) {
       cb(null, true);
@@ -56,12 +57,45 @@ const fedexAccounts = [
   }
 ];
 
+const dhlAccounts = [
+  {
+    key: "DHL_1",
+    apiKey: process.env.DHL_API_KEY_1,
+    apiSecret: process.env.DHL_API_SECRET_1,
+    accountNumber: process.env.DHL_ACCOUNT_NUMBER_1
+  },
+  {
+    key: "DHL_2",
+    apiKey: process.env.DHL_API_KEY_2,
+    apiSecret: process.env.DHL_API_SECRET_2,
+    accountNumber: process.env.DHL_ACCOUNT_NUMBER_2
+  },
+  {
+    key: "DHL_3",
+    apiKey: process.env.DHL_API_KEY_3,
+    apiSecret: process.env.DHL_API_SECRET_3,
+    accountNumber: process.env.DHL_ACCOUNT_NUMBER_3
+  }
+];
+
 
 
 
 
 const app = express();
 // require("dotenv").config();
+
+// ========================================
+// 🌐 CORS Configuration
+// ========================================
+const cors = require('cors');
+app.use(cors({
+  origin: process.env.FRONTEND_URL || '*',
+  credentials: true
+}));
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 function authenticate(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
@@ -78,6 +112,23 @@ function authenticate(req, res, next) {
     return res.status(401).json({ message: "Invalid token" });
   }
 }
+
+// Helper function to calculate transit days from delivery date
+function calculateTransitDays(deliveryDate) {
+  if (!deliveryDate) return null;
+  try {
+    const delivery = new Date(deliveryDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    delivery.setHours(0, 0, 0, 0);
+    const diffTime = delivery - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays > 0 ? diffDays : null;
+  } catch {
+    return null;
+  }
+}
+
 
 
 function normalizeShipment(row) {
@@ -96,9 +147,15 @@ function normalizeShipment(row) {
     receiver_city: row.receiver_city || "",
     receiver_postcode: row.receiver_postcode || "",
 
-     purpose: row.purpose || "SALE",
+    purpose: row.purpose || "SALE",
     declared_value: Number(row.declared_value || 100),
-    currency: row.currency || "USD"
+    declared_value: Number(row.declared_value || 100),
+    currency: row.currency || "USD",
+
+    // New fields for Duties/Taxes
+    hs_code: row.hs_code || "",
+    description: row.description || "General Merchandise",
+    document_type: row.document_type || "NON_DOCUMENTS" // DOCUMENTS or NON_DOCUMENTS
   };
 }
 function validateShipment(shipment) {
@@ -195,68 +252,73 @@ async function callFedExRate(shipment, fedexAccount) {
 
 
   const payload = {
-  accountNumber: {
-    value: fedexAccount.accountNumber
-  },
-  rateRequestControlParameters: {
-    returnTransitTimes: true
-  },
-  requestedShipment: {
-    shipper: {
-      address: {
-        countryCode: shipment.origin_country,
-        postalCode: "110001"
-      }
+    accountNumber: {
+      value: fedexAccount.accountNumber
     },
-    recipient: {
-      address: {
-        countryCode: shipment.destination_country,
-        postalCode: shipment.receiver_postcode
-      }
+    rateRequestControlParameters: {
+      returnTransitTimes: true
     },
-    pickupType: "DROPOFF_AT_FEDEX_LOCATION",
-    rateRequestType: ["ACCOUNT"],
-
-    // 👇 REQUIRED FOR INTERNATIONAL
-    customsClearanceDetail: {
-      dutiesPayment: {
-        paymentType: "SENDER"
+    requestedShipment: {
+      shipper: {
+        address: {
+          countryCode: shipment.origin_country,
+          postalCode: "110001"
+        }
       },
-      commodities: [
+      recipient: {
+        address: {
+          countryCode: shipment.destination_country,
+          postalCode: shipment.receiver_postcode
+        }
+      },
+      pickupType: "DROPOFF_AT_FEDEX_LOCATION",
+      rateRequestType: ["ACCOUNT"],
+
+      // 👇 REQUEST DUTIES AND TAXES
+      variableOptions: ["DUTIES_AND_TAXES"],
+
+      // 👇 REQUIRED FOR INTERNATIONAL
+      customsClearanceDetail: {
+        dutiesPayment: {
+          paymentType: "SENDER"
+        },
+        documentContent: shipment.document_type, // DOCUMENTS or NON_DOCUMENTS
+        commodities: [
+          {
+            description: shipment.description,
+            countryOfManufacture: shipment.origin_country,
+            harmonizedCode: shipment.hs_code, // HS Code
+            quantity: 1,
+            quantityUnits: "PCS",
+            weight: {
+              units: "KG",
+              value: shipment.weight_kg
+            },
+            customsValue: {
+              currency: shipment.currency,
+              amount: shipment.declared_value
+            },
+            purpose: shipment.purpose
+          }
+        ]
+      },
+
+      requestedPackageLineItems: [
         {
-          description: "General Merchandise",
-          countryOfManufacture: shipment.origin_country,
-          quantity: 1,
-          quantityUnits: "PCS",
           weight: {
             units: "KG",
             value: shipment.weight_kg
           },
-          customsValue: {
-            currency: shipment.currency,
-            amount: shipment.declared_value
-          },
-          purpose: shipment.purpose // 🔥 THIS FIXES YOUR ERROR
+          dimensions: {
+            length: shipment.length_cm,
+            width: shipment.width_cm,
+            height: shipment.height_cm,
+            units: "CM"
+          }
         }
       ]
-    },
-
-    requestedPackageLineItems: [
-      {
-        weight: {
-          units: "KG",
-          value: shipment.weight_kg
-        },
-        dimensions: {
-          length: shipment.length_cm,
-          width: shipment.width_cm,
-          height: shipment.height_cm,
-          units: "CM"
-        }
-      }
-    ]
-  }
-};
+    }
+  };
 
 
   const res = await fetch(
@@ -272,6 +334,7 @@ async function callFedExRate(shipment, fedexAccount) {
   );
 
   const data = await res.json();
+  console.log(data);
 
   if (!res.ok) {
     throw new Error(data.errors?.[0]?.message || "FedEx API error");
@@ -280,17 +343,127 @@ async function callFedExRate(shipment, fedexAccount) {
   const detail =
     data.output.rateReplyDetails?.[0]?.ratedShipmentDetails?.[0];
 
+  const deliveryDate = data.output.rateReplyDetails?.[0]?.operationalDetail?.deliveryDate;
+
+  // Use totalNetChargeWithDutiesAndTaxes for landed cost (freight + duty + tax)
+  // Falls back to totalNetCharge if duties/taxes not available
+  const landedCost = detail?.totalNetChargeWithDutiesAndTaxes || detail?.totalNetCharge;
+
   return {
     service: data.output.rateReplyDetails?.[0]?.serviceType,
-    amount: detail?.totalNetCharge?.amount,
-    currency: detail?.totalNetCharge?.currency,
-    transitDays:
-      data.output.rateReplyDetails?.[0]?.commit?.transitDays
+    amount: landedCost,
+    currency: detail?.currency,
+    transitDays: calculateTransitDays(deliveryDate)
   };
 }
 
+async function callDHLRate(shipment, dhlAccount) {
+  // ISO date string for tomorrow
+  // Format: YYYY-MM-DD
+  const dateStr = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+  const timestamp = new Date().toISOString();
+
+  // Map credentials
+  const siteId = dhlAccount.apiKey;
+  const password = dhlAccount.apiSecret;
+
+  const xmlPayload = `<?xml version="1.0" encoding="UTF-8"?>
+<p:DCTRequest xmlns:p="http://www.dhl.com" xmlns:p1="http://www.dhl.com/datatypes" xmlns:p2="http://www.dhl.com/DCTRequestdatatypes" schemaVersion="2.0">
+  <GetQuote>
+    <Request>
+      <ServiceHeader>
+        <MessageTime>${timestamp}</MessageTime>
+        <MessageReference>1234567890123456789012345678901</MessageReference>
+        <SiteID>${siteId}</SiteID>
+        <Password>${password}</Password>
+      </ServiceHeader>
+    </Request>
+    <From>
+      <CountryCode>${shipment.origin_country || "IN"}</CountryCode>
+      <Postalcode>110001</Postalcode>
+    </From>
+    <BkgDetails>
+      <PaymentCountryCode>${shipment.origin_country || "IN"}</PaymentCountryCode>
+      <Date>${dateStr}</Date>
+      <ReadyTime>PT10H00M</ReadyTime>
+      <DimensionUnit>CM</DimensionUnit>
+      <WeightUnit>KG</WeightUnit>
+      <Pieces>
+        <Piece>
+          <PieceID>1</PieceID>
+          <Height>${shipment.height_cm}</Height>
+          <Depth>${shipment.length_cm}</Depth>
+          <Width>${shipment.width_cm}</Width>
+          <Weight>${shipment.weight_kg}</Weight>
+        </Piece>
+      </Pieces>
+      <PaymentAccountNumber>${dhlAccount.accountNumber}</PaymentAccountNumber>
+      <IsDutiable>Y</IsDutiable>
+      <NetworkTypeCode>AL</NetworkTypeCode>
+    </BkgDetails>
+    <To>
+      <CountryCode>${shipment.destination_country}</CountryCode>
+      <Postalcode>${shipment.receiver_postcode}</Postalcode>
+    </To>
+    <Dutiable>
+      <DeclaredCurrency>${shipment.currency}</DeclaredCurrency>
+      <DeclaredValue>${shipment.declared_value}</DeclaredValue>
+    </Dutiable>
+  </GetQuote>
+</p:DCTRequest>`;
+
+  const res = await fetch("https://xmlpi-ea.dhl.com/XMLShippingServlet", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: xmlPayload
+  });
 
 
+  const text = await res.text();
+
+  // Log first 1000 chars for debugging
+  console.log(`DHL XML Response (first 1000 chars): ${text.substring(0, 1000)}...`);
+
+  if (text.includes("<ConditionData>") || text.includes("<Note>")) {
+    // Check for errors
+    const errorMatch = text.match(/<ConditionData>(.*?)<\/ConditionData>/);
+    if (errorMatch && !text.includes("<TotalNetCharge>")) { // Only throw if no rate found
+      console.error("DHL XML Error:", errorMatch[1]);
+      throw new Error(errorMatch[1]);
+    }
+  }
+
+  // Parse using Regex for simplicity (robust enough for this standard XML)
+  const productMatch = text.match(/<ProductShortName>(.*?)<\/ProductShortName>/);
+  const shippingChargeMatch = text.match(/<ShippingCharge>([\d\.]+)<\/ShippingCharge>/);
+  const currencyMatch = text.match(/<CurrencyCode>([A-Z]+)<\/CurrencyCode>/);
+  const daysMatch = text.match(/<TotalTransitDays>(\d+)<\/TotalTransitDays>/);
+
+  // Extract duty and tax charges for landed cost
+  const dutyChargeMatch = text.match(/<DutyCharge>([\d\.]+)<\/DutyCharge>/);
+  const taxChargeMatch = text.match(/<TaxCharge>([\d\.]+)<\/TaxCharge>/);
+
+  if (!shippingChargeMatch) {
+    throw new Error("No DHL Rate Found");
+  }
+
+  // Calculate total landed cost = shipping + duty + tax
+  const shippingCharge = parseFloat(shippingChargeMatch[1]);
+  const dutyCharge = dutyChargeMatch ? parseFloat(dutyChargeMatch[1]) : 0;
+  const taxCharge = taxChargeMatch ? parseFloat(taxChargeMatch[1]) : 0;
+  const landedCost = shippingCharge + dutyCharge + taxCharge;
+
+  console.log(`DHL Parsed - Service: ${productMatch ? productMatch[1] : 'N/A'}, Shipping: ${shippingCharge}, Duty: ${dutyCharge}, Tax: ${taxCharge}, Total: ${landedCost}, Currency: ${currencyMatch ? currencyMatch[1] : 'N/A'}`);
+
+  return {
+    service: productMatch ? productMatch[1] : "DHL Express",
+    amount: landedCost.toFixed(3),
+    currency: currencyMatch ? currencyMatch[1] : "USD",
+    transitDays: daysMatch ? daysMatch[1] : "N/A"
+  };
+}
 
 
 
@@ -352,7 +525,7 @@ app.post("/api/login", async (req, res) => {
 
   const token = jwt.sign(
     { id: user.id },
-   process.env.JWT_SECRET,
+    process.env.JWT_SECRET,
     { expiresIn: "48h" }
   );
 
@@ -380,7 +553,7 @@ app.get("/api/hello", (req, res) => {
 // shipment
 app.post(
   "/api/upload-shipments",
-   authenticate,
+  authenticate,
   upload.single("file"),
   async (req, res) => {
     try {
@@ -417,89 +590,139 @@ app.post(
 
       // 5️⃣ Process each shipment row
       const results = [];
-  console.log(rows);
+      console.log(rows);
       // for (const row of rows) {
-        // A. Normalize input
-        // const shipment = normalizeShipment(row);
+      // A. Normalize input
+      // const shipment = normalizeShipment(row);
 
-        // B. Validate mandatory fields
-        // const error = validateShipment(shipment);
-        
-        // if (error) {
-        //   results.push({
-        //     shipment_id: shipment.shipment_id,
-        //     status: "ERROR",
-        //     message: error,
-        //   });
-        //   continue;
-        // }
+      // B. Validate mandatory fields
+      // const error = validateShipment(shipment);
 
-        // C. Call carrier APIs (placeholder)
-        // const dhlRates = await callDHL(shipment);
-        // const fedexRates = await callFedEx(shipment);
+      // if (error) {
+      //   results.push({
+      //     shipment_id: shipment.shipment_id,
+      //     status: "ERROR",
+      //     message: error,
+      //   });
+      //   continue;
+      // }
 
-        // D. Calculate landed cost + transit time
-        // const enriched = calculateLandedCost(
-        //   shipment,
-        //   dhlRates,
-        //   fedexRates
-        // );
-        const fedexAccount = fedexAccounts[0]; // later rotate if needed
+      // C. Call carrier APIs (placeholder)
+      // const dhlRates = await callDHL(shipment);
+      // const fedexRates = await callFedEx(shipment);
 
-for (let i = 0; i < rows.length; i++) {
-  const row = rows[i];
+      // D. Calculate landed cost + transit time
+      // const enriched = calculateLandedCost(
+      //   shipment,
+      //   dhlRates,
+      //   fedexRates
+      // );
+      for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
 
-  const shipment = normalizeShipment(row);
-  const error = validateShipment(shipment);
+        const shipment = normalizeShipment(row);
+        const error = validateShipment(shipment);
 
-  if (error) {
-    row.FEDEX_STATUS = "ERROR";
-    row.FEDEX_ERROR = error;
-    continue;
-  }
+        // Iterate through all fedex accounts
+        for (let j = 0; j < fedexAccounts.length; j++) {
+          const fedexAccount = fedexAccounts[j];
+          const suffix = `_${j + 1}`; // e.g. _1, _2, _3
 
-  try {
-    const fedexRate = await callFedExRate(shipment, fedexAccount);
-   console.log(fedexRate);
-    // ✅ ADD NEW COLUMNS TO SAME ROW
-    row.FEDEX_SERVICE = fedexRate.service;
-    row.FEDEX_RATE = fedexRate.amount;
-    row.FEDEX_CURRENCY = fedexRate.currency;
-    row.FEDEX_TRANSIT_DAYS = fedexRate.transitDays;
-    row.FEDEX_STATUS = "SUCCESS";
+          if (error) {
+            row[`FEDEX_STATUS${suffix}`] = "ERROR";
+            row[`FEDEX_ERROR${suffix}`] = error;
+            continue;
+          }
 
-  } catch (err) {
-    console.log(error);
-    row.FEDEX_STATUS = "ERROR";
-    row.FEDEX_ERROR = err.message;
-  }
-}
+          try {
+            const fedexRate = await callFedExRate(shipment, fedexAccount);
+            console.log(`Rate for account ${j + 1}:`, fedexRate);
 
-const newSheet = XLSX.utils.json_to_sheet(rows);
-workbook.Sheets[sheetName] = newSheet;
+            // ✅ ADD NEW COLUMNS TO SAME ROW WITH SUFFIX
+            row[`FEDEX_ACCOUNT${suffix}`] = fedexAccount.accountNumber;
+            row[`FEDEX_SERVICE${suffix}`] = fedexRate.service;
+            row[`FEDEX_RATE${suffix}`] = fedexRate.amount;
+            row[`FEDEX_CURRENCY${suffix}`] = fedexRate.currency;
+            row[`FEDEX_TRANSIT_DAYS${suffix}`] = fedexRate.transitDays;
+            row[`FEDEX_STATUS${suffix}`] = "SUCCESS";
 
-const updatedBuffer = XLSX.write(workbook, {
-  type: "buffer",
-  bookType: "xlsx"
-});
-res.setHeader(
-  "Content-Disposition",
-  "attachment; filename=shipment_results.xlsx"
-);
-res.setHeader(
-  "Content-Type",
-  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-);
+          } catch (err) {
+            console.error(`Error for account ${j + 1}:`, err.message);
+            row[`FEDEX_STATUS${suffix}`] = "ERROR";
+            row[`FEDEX_ERROR${suffix}`] = err.message;
+          }
+        }
 
-return res.send(updatedBuffer);
+        // Iterate through all DHL accounts
+        for (let k = 0; k < dhlAccounts.length; k++) {
+          const dhlAccount = dhlAccounts[k];
+          const suffix = `_${k + 1}`;
+
+          if (error) {
+            row[`DHL_STATUS${suffix}`] = "ERROR";
+            row[`DHL_ERROR${suffix}`] = error;
+            continue;
+          }
+
+          try {
+            const dhlRate = await callDHLRate(shipment, dhlAccount);
+            row[`DHL_ACCOUNT${suffix}`] = dhlAccount.accountNumber;
+            row[`DHL_SERVICE${suffix}`] = dhlRate.service;
+            row[`DHL_RATE${suffix}`] = dhlRate.amount;
+            row[`DHL_CURRENCY${suffix}`] = dhlRate.currency;
+            row[`DHL_TRANSIT_DAYS${suffix}`] = dhlRate.transitDays;
+            row[`DHL_STATUS${suffix}`] = "SUCCESS";
+          } catch (err) {
+            console.error(`DHL Error for account ${k + 1}:`, err.message);
+            row[`DHL_STATUS${suffix}`] = "ERROR";
+            row[`DHL_ERROR${suffix}`] = err.message;
+          }
+        }
+
+      }
+
+      const newSheet = XLSX.utils.json_to_sheet(rows);
+
+      // 6️⃣ Auto-adjust column widths
+      const colWidths = Object.keys(rows[0] || {}).map((key) => {
+        let maxLength = key.toString().length; // Start with header length
+
+        rows.forEach((row) => {
+          const cellValue = row[key] ? row[key].toString() : "";
+          if (cellValue.length > maxLength) {
+            maxLength = cellValue.length;
+          }
+        });
+
+        return { wch: maxLength + 2 }; // Add a small buffer
+      });
+
+      newSheet["!cols"] = colWidths;
+
+      workbook.Sheets[sheetName] = newSheet;
+
+      const updatedBuffer = XLSX.write(workbook, {
+        type: "buffer",
+        bookType: "xlsx"
+      });
+      res.setHeader(
+        "Content-Disposition",
+        "attachment; filename=shipment_results.xlsx"
+      );
+      res.setHeader(
+        "Content-Type",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      );
+
+      return res.send(updatedBuffer);
 
 
 
-        // results.push({
-        //   shipment_id: shipment.shipment_id,
-        //   status: "SUCCESS",
-        //   note: "Processed (mock)",
-        // });
+      // results.push({
+      //   shipment_id: shipment.shipment_id,
+      //   status: "SUCCESS",
+      //   note: "Processed (mock)",
+      // });
       // }
 
       // 6️⃣ Respond (later: return file download URL)
@@ -519,15 +742,46 @@ return res.send(updatedBuffer);
 /* ------------------------
    Serve React
 ------------------------- */
-app.use(express.static(path.join(__dirname, "../client/build")));
 
-app.use((req, res) => {
-  res.sendFile(
-    path.join(__dirname, "../client/build/index.html")
-  );
-});
+// ========================================
+// 🌐 SERVE REACT BUILD IN PRODUCTION
+// ========================================
+if (process.env.NODE_ENV === 'production') {
+  const path = require('path');
+  app.use(express.static(path.join(__dirname, '../client/build')));
 
+  // Express 5 requires proper pattern instead of bare '*'
+  app.use((req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build/index.html'));
+  });
+}
+
+// ========================================
+// 🚀 START SERVER
+// ========================================
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () =>
+const server = app.listen(PORT, () =>
   console.log(`Server running on http://localhost:${PORT}`)
 );
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Error: Port ${PORT} is already in use. The server might already be running in another terminal.`);
+    process.exit(1);
+  } else {
+    console.error('Server error:', err);
+  }
+});
+
+process.on('exit', (code) => {
+  console.log(`About to exit with code: ${code}`);
+});
+
+process.on('SIGINT', () => {
+  console.log("Received SIGINT");
+  process.exit();
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+});
