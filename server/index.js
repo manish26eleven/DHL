@@ -744,11 +744,27 @@ app.post(
 // ========================================
 if (process.env.NODE_ENV === 'production') {
   const path = require('path');
-  app.use(express.static(path.join(__dirname, '../client/build')));
+  const clientBuildPath = path.join(__dirname, '../client/build');
+  console.log('Serving React from:', clientBuildPath);
+
+  // Verify if directory exists
+  const fs = require('fs');
+  if (fs.existsSync(clientBuildPath)) {
+    console.log('Client build directory exists with contents:', fs.readdirSync(clientBuildPath));
+  } else {
+    console.error('CRITICAL ERROR: Client build directory does NOT exist!');
+  }
+
+  app.use(express.static(clientBuildPath));
 
   // Express 5 requires proper pattern instead of bare '*'
-  app.use((req, res) => {
-    res.sendFile(path.join(__dirname, '../client/build/index.html'));
+  app.get('*', (req, res) => {
+    console.log('Serving index.html for:', req.url);
+    if (fs.existsSync(path.join(clientBuildPath, 'index.html'))) {
+      res.sendFile(path.join(clientBuildPath, 'index.html'));
+    } else {
+      res.status(404).send('React app not built! index.html missing.');
+    }
   });
 }
 
