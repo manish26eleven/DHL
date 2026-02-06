@@ -1,0 +1,183 @@
+/* -----------------------
+   Page Container
+------------------------ */
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  padding: 16px;
+  gap:25px;
+  background: linear-gradient(135deg, #f4f6f8, #eef1f5);
+}
+
+/* -----------------------
+   Auth Card
+------------------------ */
+.auth-box {
+  width: 100%;
+  max-width: 380px;
+  padding: 32px 28px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
+}
+
+/* -----------------------
+   Title
+------------------------ */
+.auth-box h2 {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* -----------------------
+   Inputs
+------------------------ */
+.auth-box input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 15px;
+  color: #111827;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.auth-box input::placeholder {
+  color: #9ca3af;
+}
+
+.auth-box input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* -----------------------
+   Button
+------------------------ */
+.auth-box button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 4px;
+  border: none;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+.auth-box input {
+  box-sizing: border-box;
+}
+
+.auth-box button:hover {
+  background: #1e40af;
+}
+.error {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+.logo {
+
+  width: 300px;
+  height: 170px
+}
+
+
+.auth-box button:active {
+  transform: scale(0.98);
+}
+
+/* -----------------------
+   Toggle Text
+------------------------ */
+.toggle {
+  margin-top: 16px;
+  text-align: center;
+  color: #2563eb;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.toggle:hover {
+  text-decoration: underline;
+}
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 60px; /* space for toggle */
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 20%;
+  /* transform: translateY(-50%); */
+
+  cursor: pointer;
+  color: #666;
+
+  font-size: 22px;      /* 🔥 icon size ONLY */
+  display: flex;        /* critical */
+  align-items:flex-start; /* vertical centering */
+}
+
+.toggle-password svg {
+  display: block;       /* removes baseline offset */
+}
+
+
+.toggle-password:hover {
+  color: #000;
+}
+
+
+/* -----------------------
+   Mobile (small screens)
+------------------------ */
+@media (max-width: 480px) {
+  .auth-box {
+    padding: 24px 20px;
+  }
+
+  .auth-box h2 {
+    font-size: 1.4rem;
+  }
+
+  .auth-box input {
+    font-size: 14px;
+    padding: 11px 12px;
+  }
+
+  .auth-box button {
+    font-size: 15px;
+  }
+}
+
+/* -----------------------
+   Large screens
+------------------------ */
+@media (min-width: 1024px) {
+  .auth-box {
+    max-width: 420px;
+  }
+}
