@@ -1,7 +1,3 @@
-```javascript
-
-
-
 const express = require("express");
 const path = require("path");
 const bcrypt = require("bcrypt");
@@ -326,7 +322,7 @@ async function callFedExRate(shipment, fedexAccount) {
     {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${ token } `,
+        Authorization: `Bearer ${token} `,
         "Content-Type": "application/json"
       },
       body: JSON.stringify(payload)
@@ -424,7 +420,7 @@ async function callDHLRate(shipment, dhlAccount) {
   const text = await res.text();
 
   // Log first 1000 chars for debugging
-  console.log(`DHL XML Response(first 1000 chars): ${ text.substring(0, 1000) }...`);
+  console.log(`DHL XML Response(first 1000 chars): ${text.substring(0, 1000)}...`);
 
   if (text.includes("<ConditionData>") || text.includes("<Note>")) {
     // Check for errors
@@ -455,7 +451,7 @@ async function callDHLRate(shipment, dhlAccount) {
   const taxCharge = taxChargeMatch ? parseFloat(taxChargeMatch[1]) : 0;
   const landedCost = shippingCharge + dutyCharge + taxCharge;
 
-  console.log(`DHL Parsed - Service: ${ productMatch ? productMatch[1] : 'N/A' }, Shipping: ${ shippingCharge }, Duty: ${ dutyCharge }, Tax: ${ taxCharge }, Total: ${ landedCost }, Currency: ${ currencyMatch ? currencyMatch[1] : 'N/A' } `);
+  console.log(`DHL Parsed - Service: ${productMatch ? productMatch[1] : 'N/A'}, Shipping: ${shippingCharge}, Duty: ${dutyCharge}, Tax: ${taxCharge}, Total: ${landedCost}, Currency: ${currencyMatch ? currencyMatch[1] : 'N/A'} `);
 
   return {
     service: productMatch ? productMatch[1] : "DHL Express",
@@ -626,56 +622,56 @@ app.post(
         // Iterate through all fedex accounts
         for (let j = 0; j < fedexAccounts.length; j++) {
           const fedexAccount = fedexAccounts[j];
-          const suffix = `_${ j + 1 } `; // e.g. _1, _2, _3
+          const suffix = `_${j + 1} `; // e.g. _1, _2, _3
 
           if (error) {
-            row[`FEDEX_STATUS${ suffix } `] = "ERROR";
-            row[`FEDEX_ERROR${ suffix } `] = error;
+            row[`FEDEX_STATUS${suffix} `] = "ERROR";
+            row[`FEDEX_ERROR${suffix} `] = error;
             continue;
           }
 
           try {
             const fedexRate = await callFedExRate(shipment, fedexAccount);
-            console.log(`Rate for account ${ j + 1}: `, fedexRate);
+            console.log(`Rate for account ${j + 1}: `, fedexRate);
 
             // ✅ ADD NEW COLUMNS TO SAME ROW WITH SUFFIX
-            row[`FEDEX_ACCOUNT${ suffix } `] = fedexAccount.accountNumber;
-            row[`FEDEX_SERVICE${ suffix } `] = fedexRate.service;
-            row[`FEDEX_RATE${ suffix } `] = fedexRate.amount;
-            row[`FEDEX_CURRENCY${ suffix } `] = fedexRate.currency;
-            row[`FEDEX_TRANSIT_DAYS${ suffix } `] = fedexRate.transitDays;
-            row[`FEDEX_STATUS${ suffix } `] = "SUCCESS";
+            row[`FEDEX_ACCOUNT${suffix} `] = fedexAccount.accountNumber;
+            row[`FEDEX_SERVICE${suffix} `] = fedexRate.service;
+            row[`FEDEX_RATE${suffix} `] = fedexRate.amount;
+            row[`FEDEX_CURRENCY${suffix} `] = fedexRate.currency;
+            row[`FEDEX_TRANSIT_DAYS${suffix} `] = fedexRate.transitDays;
+            row[`FEDEX_STATUS${suffix} `] = "SUCCESS";
 
           } catch (err) {
-            console.error(`Error for account ${ j + 1}: `, err.message);
-            row[`FEDEX_STATUS${ suffix } `] = "ERROR";
-            row[`FEDEX_ERROR${ suffix } `] = err.message;
+            console.error(`Error for account ${j + 1}: `, err.message);
+            row[`FEDEX_STATUS${suffix} `] = "ERROR";
+            row[`FEDEX_ERROR${suffix} `] = err.message;
           }
         }
 
         // Iterate through all DHL accounts
         for (let k = 0; k < dhlAccounts.length; k++) {
           const dhlAccount = dhlAccounts[k];
-          const suffix = `_${ k + 1 } `;
+          const suffix = `_${k + 1} `;
 
           if (error) {
-            row[`DHL_STATUS${ suffix } `] = "ERROR";
-            row[`DHL_ERROR${ suffix } `] = error;
+            row[`DHL_STATUS${suffix} `] = "ERROR";
+            row[`DHL_ERROR${suffix} `] = error;
             continue;
           }
 
           try {
             const dhlRate = await callDHLRate(shipment, dhlAccount);
-            row[`DHL_ACCOUNT${ suffix } `] = dhlAccount.accountNumber;
-            row[`DHL_SERVICE${ suffix } `] = dhlRate.service;
-            row[`DHL_RATE${ suffix } `] = dhlRate.amount;
-            row[`DHL_CURRENCY${ suffix } `] = dhlRate.currency;
-            row[`DHL_TRANSIT_DAYS${ suffix } `] = dhlRate.transitDays;
-            row[`DHL_STATUS${ suffix } `] = "SUCCESS";
+            row[`DHL_ACCOUNT${suffix} `] = dhlAccount.accountNumber;
+            row[`DHL_SERVICE${suffix} `] = dhlRate.service;
+            row[`DHL_RATE${suffix} `] = dhlRate.amount;
+            row[`DHL_CURRENCY${suffix} `] = dhlRate.currency;
+            row[`DHL_TRANSIT_DAYS${suffix} `] = dhlRate.transitDays;
+            row[`DHL_STATUS${suffix} `] = "SUCCESS";
           } catch (err) {
-            console.error(`DHL Error for account ${ k + 1}: `, err.message);
-            row[`DHL_STATUS${ suffix } `] = "ERROR";
-            row[`DHL_ERROR${ suffix } `] = err.message;
+            console.error(`DHL Error for account ${k + 1}: `, err.message);
+            row[`DHL_STATUS${suffix} `] = "ERROR";
+            row[`DHL_ERROR${suffix} `] = err.message;
           }
         }
 
