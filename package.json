@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "cd server && NODE_ENV=production node index.js",
-    "build": "echo 'Building via Nixpacks...'"
+    "start": "cd server && NODE_ENV=production node index.js"
   },
   "engines": {
     "node": "20.x"
