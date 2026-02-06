@@ -4,13 +4,13 @@ nixPkgs = ["nodejs_20", "python3", "gcc", "gnumake"]
 [phases.install]
 cmds = [
   "cd client && npm install",
-  "cd ../server && npm install"
+  "cd server && npm install"
 ]
 
 [phases.build]
 cmds = [
   "cd client && npm run build",
-  "cd ../server && npm rebuild better-sqlite3 --build-from-source"
+  "cd server && npm rebuild better-sqlite3 --build-from-source"
 ]
 
 [start]
