@@ -744,7 +744,7 @@ app.post(
 // ========================================
 if (process.env.NODE_ENV === 'production') {
   const path = require('path');
-  const clientBuildPath = path.join(__dirname, '../client/build');
+  const clientBuildPath = path.join(__dirname, 'client-build');
   console.log('Serving React from:', clientBuildPath);
 
   // Verify if directory exists
@@ -758,7 +758,7 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(clientBuildPath));
 
   // Express 5 requires proper pattern instead of bare '*'
-  app.get('*', (req, res) => {
+  app.get(/(.*)/, (req, res) => {
     console.log('Serving index.html for:', req.url);
     if (fs.existsSync(path.join(clientBuildPath, 'index.html'))) {
       res.sendFile(path.join(clientBuildPath, 'index.html'));
