@@ -65,7 +65,7 @@ export default function Auth() {
     <div >
 
       <div className="auth-container">
-        <img src='/Dhl_Logo.png' class='logo' />
+        <img src='/Dhl_Logo.png' className='logo' alt="DHL Logo" />
         <form className="auth-box" onSubmit={handleSubmit}>
           <h2>{isLogin ? "Login" : "Sign Up"}</h2>
 

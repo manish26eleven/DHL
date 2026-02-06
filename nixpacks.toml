@@ -10,7 +10,7 @@ cmds = [
 [phases.build]
 
 cmds = [
-  "cd client && npm install && npm run build",
+  "cd client && npm install && CI=false npm run build",
   "mkdir -p server/client-build && cp -r client/build/* server/client-build/",
   "cd server && npm rebuild better-sqlite3 --build-from-source"
 ]

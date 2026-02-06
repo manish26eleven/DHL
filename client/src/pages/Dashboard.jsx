@@ -103,7 +103,7 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-wrapper">
-      <img src='/Dhl_Logo.png' class='logo' />
+      <img src='/Dhl_Logo.png' className='logo' alt="DHL Logo" />
 
       <div className="dashboard-card">
         <h1>Shipment Calculator</h1>
