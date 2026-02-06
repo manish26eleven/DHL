@@ -4,7 +4,7 @@ client/node_modules/
 server/node_modules/
 
 # Production build
-# client/build/ (Uncommented to allow pushing build artifacts)
+client/build/
 
 # Environment variables
 .env

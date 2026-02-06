@@ -4,6 +4,6 @@ server/node_modules
 .git
 .env
 server/.env
-# client/build (Uncommented to allow upload)
+client/build
 logs
 *.log
