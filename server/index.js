@@ -6,7 +6,7 @@ const db = require("./db/sqlite");
 const multer = require("multer");
 const XLSX = require("xlsx");
 // const { CLIENT_RENEG_LIMIT } = require("tls");
-require("dotenv").config();
+require("dotenv").config({ path: path.join(__dirname, ".env") });
 // const PORT = process.env.PORT || 5000;
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -344,16 +344,6 @@ async function callFedExRate(shipment, fedexAccount) {
       const detail = rateDetail.ratedShipmentDetails?.[0];
       const deliveryDate = rateDetail.operationalDetail?.deliveryDate;
 
-      console.log(`DEBUG FedEx Service: ${serviceType}`);
-      console.log(`DEBUG FedEx Detail Keys: ${Object.keys(detail || {})}`);
-      if (detail) {
-        console.log(`DEBUG FedEx Charges:`, {
-          totalNetCharge: detail.totalNetCharge,
-          totalDutiesTaxes: detail.totalDutiesTaxes,
-          totalNetChargeWithDutiesAndTaxes: detail.totalNetChargeWithDutiesAndTaxes
-        });
-      }
-
       // Extract components
       const freightCharge = detail?.totalNetCharge || 0;
       const dutyTaxCharge = detail?.totalDutiesTaxes || 0;
@@ -442,9 +432,8 @@ async function callDHLRate(shipment, dhlAccount) {
 
   const text = await res.text();
 
-  // Log raw XML for debugging if needed
-  // console.log(`DHL XML Response: ${text}`);
-  console.log(`DHL XML Response Length: ${text.length}`);
+  // Log first 1000 chars for debugging
+  console.log(`DHL XML Response(first 1000 chars): ${text.substring(0, 1000)}...`);
 
   if (text.includes("<ConditionData>") || text.includes("<Note>")) {
     // Check for errors
