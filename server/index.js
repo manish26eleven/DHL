@@ -145,7 +145,6 @@ function normalizeShipment(row) {
 
     purpose: row.purpose || "SALE",
     declared_value: Number(row.declared_value || 100),
-    declared_value: Number(row.declared_value || 100),
     currency: row.currency || "USD",
 
     // New fields for Duties/Taxes
@@ -336,21 +335,45 @@ async function callFedExRate(shipment, fedexAccount) {
     throw new Error(data.errors?.[0]?.message || "FedEx API error");
   }
 
-  const detail =
-    data.output.rateReplyDetails?.[0]?.ratedShipmentDetails?.[0];
+  const rates = [];
 
-  const deliveryDate = data.output.rateReplyDetails?.[0]?.operationalDetail?.deliveryDate;
+  if (data.output && data.output.rateReplyDetails) {
+    for (const rateDetail of data.output.rateReplyDetails) {
+      const serviceType = rateDetail.serviceType;
+      // Get the first ratedShipmentDetail (usually the relevant one for the account)
+      const detail = rateDetail.ratedShipmentDetails?.[0];
+      const deliveryDate = rateDetail.operationalDetail?.deliveryDate;
 
-  // Use totalNetChargeWithDutiesAndTaxes for landed cost (freight + duty + tax)
-  // Falls back to totalNetCharge if duties/taxes not available
-  const landedCost = detail?.totalNetChargeWithDutiesAndTaxes || detail?.totalNetCharge;
+      console.log(`DEBUG FedEx Service: ${serviceType}`);
+      console.log(`DEBUG FedEx Detail Keys: ${Object.keys(detail || {})}`);
+      if (detail) {
+        console.log(`DEBUG FedEx Charges:`, {
+          totalNetCharge: detail.totalNetCharge,
+          totalDutiesTaxes: detail.totalDutiesTaxes,
+          totalNetChargeWithDutiesAndTaxes: detail.totalNetChargeWithDutiesAndTaxes
+        });
+      }
 
-  return {
-    service: data.output.rateReplyDetails?.[0]?.serviceType,
-    amount: landedCost,
-    currency: detail?.currency,
-    transitDays: calculateTransitDays(deliveryDate)
-  };
+      // Extract components
+      const freightCharge = detail?.totalNetCharge || 0;
+      const dutyTaxCharge = detail?.totalDutiesTaxes || 0;
+
+      // Use totalNetChargeWithDutiesAndTaxes for landed cost (freight + duty + tax)
+      // Falls back to totalNetCharge if duties/taxes not available
+      const landedCost = detail?.totalNetChargeWithDutiesAndTaxes || freightCharge;
+
+      rates.push({
+        service: serviceType,
+        amount: landedCost,
+        freight: freightCharge,
+        dutyTax: dutyTaxCharge,
+        currency: detail?.currency,
+        transitDays: calculateTransitDays(deliveryDate)
+      });
+    }
+  }
+
+  return rates;
 }
 
 async function callDHLRate(shipment, dhlAccount) {
@@ -419,8 +442,9 @@ async function callDHLRate(shipment, dhlAccount) {
 
   const text = await res.text();
 
-  // Log first 1000 chars for debugging
-  console.log(`DHL XML Response(first 1000 chars): ${text.substring(0, 1000)}...`);
+  // Log raw XML for debugging if needed
+  // console.log(`DHL XML Response: ${text}`);
+  console.log(`DHL XML Response Length: ${text.length}`);
 
   if (text.includes("<ConditionData>") || text.includes("<Note>")) {
     // Check for errors
@@ -431,34 +455,59 @@ async function callDHLRate(shipment, dhlAccount) {
     }
   }
 
-  // Parse using Regex for simplicity (robust enough for this standard XML)
-  const productMatch = text.match(/<ProductShortName>(.*?)<\/ProductShortName>/);
-  const shippingChargeMatch = text.match(/<ShippingCharge>([\d\.]+)<\/ShippingCharge>/);
-  const currencyMatch = text.match(/<CurrencyCode>([A-Z]+)<\/CurrencyCode>/);
-  const daysMatch = text.match(/<TotalTransitDays>(\d+)<\/TotalTransitDays>/);
+  // Split response by <QtdShp> (Quote Shipment) blocks to handle multiple services
+  // The first part of the split might be header/metadata, so we skip it or check content
+  const qtdShpBlocks = text.split(/<QtdShp>/).slice(1); // Remove pre-amble
 
-  // Extract duty and tax charges for landed cost
-  const dutyChargeMatch = text.match(/<DutyCharge>([\d\.]+)<\/DutyCharge>/);
-  const taxChargeMatch = text.match(/<TaxCharge>([\d\.]+)<\/TaxCharge>/);
-
-  if (!shippingChargeMatch) {
+  if (qtdShpBlocks.length === 0) {
+    // Check for error in the whole text if no blocks found
+    const errorMatch = text.match(/<ConditionData>(.*?)<\/ConditionData>/);
+    if (errorMatch) {
+      console.error("DHL XML Error:", errorMatch[1]);
+      throw new Error(errorMatch[1]);
+    }
     throw new Error("No DHL Rate Found");
   }
 
-  // Calculate total landed cost = shipping + duty + tax
-  const shippingCharge = parseFloat(shippingChargeMatch[1]);
-  const dutyCharge = dutyChargeMatch ? parseFloat(dutyChargeMatch[1]) : 0;
-  const taxCharge = taxChargeMatch ? parseFloat(taxChargeMatch[1]) : 0;
-  const landedCost = shippingCharge + dutyCharge + taxCharge;
+  const rates = [];
 
-  console.log(`DHL Parsed - Service: ${productMatch ? productMatch[1] : 'N/A'}, Shipping: ${shippingCharge}, Duty: ${dutyCharge}, Tax: ${taxCharge}, Total: ${landedCost}, Currency: ${currencyMatch ? currencyMatch[1] : 'N/A'} `);
+  for (const block of qtdShpBlocks) {
+    // Close the tag artificially to make regex boundaries safer if needed, 
+    // but we just search within the `block` string which is technically up to the next <QtdShp> or end of QtdSInAdCur
 
-  return {
-    service: productMatch ? productMatch[1] : "DHL Express",
-    amount: landedCost.toFixed(3),
-    currency: currencyMatch ? currencyMatch[1] : "USD",
-    transitDays: daysMatch ? daysMatch[1] : "N/A"
-  };
+    const productMatch = block.match(/<ProductShortName>(.*?)<\/ProductShortName>/);
+    const shippingChargeMatch = block.match(/<ShippingCharge>([\d\.]+)<\/ShippingCharge>/);
+    const currencyMatch = block.match(/<CurrencyCode>([A-Z]+)<\/CurrencyCode>/);
+    const daysMatch = block.match(/<TotalTransitDays>(\d+)<\/TotalTransitDays>/);
+
+    // Duty and Tax are often peers to ShippingCharge inside QtdShp -> QtdSInAdCur... wait.
+    // In standard DHL XMLPI, Duty/Tax are inside <QtdShp>?
+    // Actually, Duty/Tax breakdown might be in <QtdShp> or at a higher level depending on request.
+    // Assuming they are within the <QtdShp> block for that specific service.
+
+    const dutyChargeMatch = block.match(/<DutyCharge>([\d\.]+)<\/DutyCharge>/);
+    const taxChargeMatch = block.match(/<TaxCharge>([\d\.]+)<\/TaxCharge>/);
+
+    if (shippingChargeMatch) {
+      const shippingCharge = parseFloat(shippingChargeMatch[1]);
+      const dutyCharge = dutyChargeMatch ? parseFloat(dutyChargeMatch[1]) : 0;
+      const taxCharge = taxChargeMatch ? parseFloat(taxChargeMatch[1]) : 0;
+      const landedCost = shippingCharge + dutyCharge + taxCharge;
+
+      rates.push({
+        service: productMatch ? productMatch[1] : "DHL Service",
+        amount: landedCost.toFixed(3),
+        freight: shippingCharge.toFixed(2),
+        duty: dutyCharge.toFixed(2),
+        tax: taxCharge.toFixed(2),
+        currency: currencyMatch ? currencyMatch[1] : "USD",
+        transitDays: daysMatch ? daysMatch[1] : "N/A"
+      });
+    }
+  }
+
+  console.log(`DHL Parsed ${rates.length} rates.`);
+  return rates;
 }
 
 
@@ -613,77 +662,147 @@ app.post(
       //   dhlRates,
       //   fedexRates
       // );
+      const outputRows = [];
+
       for (let i = 0; i < rows.length; i++) {
         const row = rows[i];
-
         const shipment = normalizeShipment(row);
-        const error = validateShipment(shipment);
+        const validationError = validateShipment(shipment);
 
-        // Iterate through all fedex accounts
+        // Base row data to preserve in every output line
+        const baseRowData = {
+          ...row, // Keep original columns
+          // Enforce normalized columns if needed, or just rely on spread
+        };
+
+        if (validationError) {
+          outputRows.push({
+            ...baseRowData,
+            "Carrier": "ERROR",
+            "Account": "N/A",
+            "Service": "N/A",
+            "Rate": 0,
+            "Currency": "N/A",
+            "Transit Days": "N/A",
+            "Status": "ERROR",
+            "Error Message": validationError
+          });
+          continue;
+        }
+
+        // ============================
+        // 1. Process FedEx Accounts
+        // ============================
         for (let j = 0; j < fedexAccounts.length; j++) {
           const fedexAccount = fedexAccounts[j];
-          const suffix = `_${j + 1} `; // e.g. _1, _2, _3
-
-          if (error) {
-            row[`FEDEX_STATUS${suffix} `] = "ERROR";
-            row[`FEDEX_ERROR${suffix} `] = error;
-            continue;
-          }
-
           try {
-            const fedexRate = await callFedExRate(shipment, fedexAccount);
-            console.log(`Rate for account ${j + 1}: `, fedexRate);
+            const fedexRates = await callFedExRate(shipment, fedexAccount);
 
-            // ✅ ADD NEW COLUMNS TO SAME ROW WITH SUFFIX
-            row[`FEDEX_ACCOUNT${suffix} `] = fedexAccount.accountNumber;
-            row[`FEDEX_SERVICE${suffix} `] = fedexRate.service;
-            row[`FEDEX_RATE${suffix} `] = fedexRate.amount;
-            row[`FEDEX_CURRENCY${suffix} `] = fedexRate.currency;
-            row[`FEDEX_TRANSIT_DAYS${suffix} `] = fedexRate.transitDays;
-            row[`FEDEX_STATUS${suffix} `] = "SUCCESS";
+            // fedexRates should now be an ARRAY of rate objects
+            // If the specialized function returns a single object (legacy), wrap it:
+            const ratesArray = Array.isArray(fedexRates) ? fedexRates : [fedexRates];
+
+            if (ratesArray.length === 0) {
+              outputRows.push({
+                ...baseRowData,
+                "Carrier": `FedEx (${fedexAccount.key})`,
+                "Account": fedexAccount.accountNumber,
+                "Service": "None",
+                "Status": "NO_RATES",
+                "Error Message": "No rates returned"
+              });
+            }
+
+            ratesArray.forEach(rate => {
+              outputRows.push({
+                ...baseRowData,
+                "Carrier": "FedEx",
+                "Account": fedexAccount.accountNumber,
+                "Account Key": fedexAccount.key,
+                "Service": rate.service,
+                "Freight Charge": rate.freight,
+                "Duty & Tax": rate.dutyTax,
+                "Total Landed Cost": rate.amount,
+                "Currency": rate.currency,
+                "Transit Days": rate.transitDays,
+                "Status": "SUCCESS",
+                "Error Message": ""
+              });
+            });
 
           } catch (err) {
-            console.error(`Error for account ${j + 1}: `, err.message);
-            row[`FEDEX_STATUS${suffix} `] = "ERROR";
-            row[`FEDEX_ERROR${suffix} `] = err.message;
+            console.error(`FedEx Account ${j + 1} Error:`, err.message);
+            outputRows.push({
+              ...baseRowData,
+              "Carrier": "FedEx",
+              "Account": fedexAccount.accountNumber,
+              "Account Key": fedexAccount.key,
+              "Status": "ERROR",
+              "Error Message": err.message
+            });
           }
         }
 
-        // Iterate through all DHL accounts
+        // ============================
+        // 2. Process DHL Accounts
+        // ============================
         for (let k = 0; k < dhlAccounts.length; k++) {
           const dhlAccount = dhlAccounts[k];
-          const suffix = `_${k + 1} `;
-
-          if (error) {
-            row[`DHL_STATUS${suffix} `] = "ERROR";
-            row[`DHL_ERROR${suffix} `] = error;
-            continue;
-          }
-
           try {
-            const dhlRate = await callDHLRate(shipment, dhlAccount);
-            row[`DHL_ACCOUNT${suffix} `] = dhlAccount.accountNumber;
-            row[`DHL_SERVICE${suffix} `] = dhlRate.service;
-            row[`DHL_RATE${suffix} `] = dhlRate.amount;
-            row[`DHL_CURRENCY${suffix} `] = dhlRate.currency;
-            row[`DHL_TRANSIT_DAYS${suffix} `] = dhlRate.transitDays;
-            row[`DHL_STATUS${suffix} `] = "SUCCESS";
+            const dhlRates = await callDHLRate(shipment, dhlAccount);
+            const ratesArray = Array.isArray(dhlRates) ? dhlRates : [dhlRates];
+
+            if (ratesArray.length === 0) {
+              outputRows.push({
+                ...baseRowData,
+                "Carrier": `DHL (${dhlAccount.key})`,
+                "Account": dhlAccount.accountNumber,
+                "Service": "None",
+                "Status": "NO_RATES",
+                "Error Message": "No rates returned"
+              });
+            }
+
+            ratesArray.forEach(rate => {
+              outputRows.push({
+                ...baseRowData,
+                "Carrier": "DHL",
+                "Account": dhlAccount.accountNumber,
+                "Account Key": dhlAccount.key,
+                "Service": rate.service,
+                "Freight Charge": rate.freight,
+                "Duty Charge": rate.duty,
+                "Tax Charge": rate.tax,
+                "Total Landed Cost": rate.amount,
+                "Currency": rate.currency,
+                "Transit Days": rate.transitDays,
+                "Status": "SUCCESS",
+                "Error Message": ""
+              });
+            });
+
           } catch (err) {
-            console.error(`DHL Error for account ${k + 1}: `, err.message);
-            row[`DHL_STATUS${suffix} `] = "ERROR";
-            row[`DHL_ERROR${suffix} `] = err.message;
+            console.error(`DHL Account ${k + 1} Error:`, err.message);
+            outputRows.push({
+              ...baseRowData,
+              "Carrier": "DHL",
+              "Account": dhlAccount.accountNumber,
+              "Account Key": dhlAccount.key,
+              "Status": "ERROR",
+              "Error Message": err.message
+            });
           }
         }
-
       }
 
-      const newSheet = XLSX.utils.json_to_sheet(rows);
+      // Use the new flattened rows for the Excel output
+      const newSheet = XLSX.utils.json_to_sheet(outputRows);
 
       // 6️⃣ Auto-adjust column widths
-      const colWidths = Object.keys(rows[0] || {}).map((key) => {
+      const colWidths = Object.keys(outputRows[0] || {}).map((key) => {
         let maxLength = key.toString().length; // Start with header length
 
-        rows.forEach((row) => {
+        outputRows.forEach((row) => {
           const cellValue = row[key] ? row[key].toString() : "";
           if (cellValue.length > maxLength) {
             maxLength = cellValue.length;
