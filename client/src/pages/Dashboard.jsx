@@ -3,51 +3,45 @@ import "./Dashboard.css";
 
 export default function Dashboard() {
   const [file, setFile] = useState(null);
+  const [selectedFedex, setSelectedFedex] = useState({
+    INTERNATIONAL_FIRST: true,
+    FEDEX_INTERNATIONAL_PRIORITY_EXPRESS: true,
+    FEDEX_INTERNATIONAL_PRIORITY: true,
+    FEDEX_INTERNATIONAL_CONNECT_PLUS: true,
+    INTERNATIONAL_ECONOMY: true,
+  });
+
+  const [selectedDhl, setSelectedDhl] = useState({
+    "EXPRESS WORLDWIDE": true,
+    "ECONOMY SELECT": true,
+  });
+
   const [isLoading, setIsLoading] = useState(false);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
 
+  const fedexServices = [
+    { id: "INTERNATIONAL_FIRST", label: "International First" },
+    { id: "FEDEX_INTERNATIONAL_PRIORITY_EXPRESS", label: "International Priority Express" },
+    { id: "FEDEX_INTERNATIONAL_PRIORITY", label: "International Priority" },
+    { id: "FEDEX_INTERNATIONAL_CONNECT_PLUS", label: "International Connect Plus" },
+    { id: "INTERNATIONAL_ECONOMY", label: "International Economy" },
+  ];
 
+  const dhlServices = [
+    { id: "EXPRESS WORLDWIDE", label: "Worldwide Express" },
+    { id: "ECONOMY SELECT", label: "Economy Select" },
+  ];
 
-  //  const handleUpload = async (e) => {
-  //   e.preventDefault();
+  const handleFedexToggle = (id) => {
+    setSelectedFedex(prev => ({ ...prev, [id]: !prev[id] }));
+  };
 
-  //   if (!file) {
-  //     alert("Please select an Excel file");
-  //     return;
-  //   }
-
-  //   const formData = new FormData();
-  //   formData.append("file", file);
-
-  //   try {
-  //     console.log(localStorage.getItem("token"));
-  //     const res = await fetch("/api/upload-shipments", {
-  //       method: "POST",
-  //       body: formData,
-  //       headers: {
-  //         // ❌ DO NOT set Content-Type manually
-  //         Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //       },
-  //     });
-
-  //     const data = await res.json();
-
-  //     if (!res.ok) {
-  //       alert(data.message || "Upload failed");
-  //       return;
-  //     }
-
-  //     console.log("Processed result:", data);
-  //     alert("File processed successfully");
-  //   } catch (err) {
-  //     console.error(err);
-  //     alert("Server error");
-  //   }
-  // };
-
+  const handleDhlToggle = (id) => {
+    setSelectedDhl(prev => ({ ...prev, [id]: !prev[id] }));
+  };
 
   const handleUpload = async (e) => {
     e.preventDefault();
@@ -59,6 +53,14 @@ export default function Dashboard() {
 
     const formData = new FormData();
     formData.append("file", file);
+
+    // Add selected services
+    const services = {
+      fedex: Object.keys(selectedFedex).filter(key => selectedFedex[key]),
+      dhl: Object.keys(selectedDhl).filter(key => selectedDhl[key])
+    };
+    console.log("Sending services:", services);
+    formData.append("services", JSON.stringify(services));
 
     try {
       setIsLoading(true);
@@ -99,8 +101,6 @@ export default function Dashboard() {
   };
 
 
-
-
   return (
     <div className="dashboard-wrapper">
       <img src='/Dhl_Logo.png' className='logo' alt="DHL Logo" />
@@ -126,6 +126,36 @@ export default function Dashboard() {
             </label>
 
             {file && <p className="file-name">{file.name}</p>}
+          </div>
+
+          <div className="services-selection">
+            <div className="service-column">
+              <h3>FedEx (Export services only)</h3>
+              {fedexServices.map(service => (
+                <div key={service.id} className="service-item">
+                  <span>{service.label}</span>
+                  <input
+                    type="checkbox"
+                    checked={selectedFedex[service.id]}
+                    onChange={() => handleFedexToggle(service.id)}
+                  />
+                </div>
+              ))}
+            </div>
+
+            <div className="service-column">
+              <h3>DHL (Export Services Only)</h3>
+              {dhlServices.map(service => (
+                <div key={service.id} className="service-item">
+                  <span>{service.label}</span>
+                  <input
+                    type="checkbox"
+                    checked={selectedDhl[service.id]}
+                    onChange={() => handleDhlToggle(service.id)}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
 
           <button

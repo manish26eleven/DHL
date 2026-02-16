@@ -623,6 +623,22 @@ app.post(
         });
       }
 
+      // 4.5️⃣ Parse selected services if provided
+      console.log("req.body:", req.body);
+      console.log("req.body.services:", req.body.services);
+
+      let selectedServices = null;
+      if (req.body.services) {
+        try {
+          selectedServices = JSON.parse(req.body.services);
+          console.log("Selected services for filtering:", selectedServices);
+        } catch (e) {
+          console.error("Error parsing services:", e);
+        }
+      } else {
+        console.log("No services field in request body - showing all services");
+      }
+
       // 5️⃣ Process each shipment row
       const results = [];
       console.log(rows);
@@ -704,6 +720,19 @@ app.post(
             }
 
             ratesArray.forEach(rate => {
+              // Filtering logic
+              console.log(`Checking FedEx service: ${rate.service}`);
+              console.log(`Selected FedEx services:`, selectedServices?.fedex);
+
+              if (selectedServices && selectedServices.fedex && selectedServices.fedex.length > 0) {
+                if (!selectedServices.fedex.includes(rate.service)) {
+                  console.log(`Skipping ${rate.service} - not in selected list`);
+                  return; // Skip if not in selected list
+                }
+              }
+
+              console.log(`Including ${rate.service} in results`);
+
               outputRows.push({
                 ...baseRowData,
                 "Carrier": "FedEx",
@@ -754,6 +783,15 @@ app.post(
             }
 
             ratesArray.forEach(rate => {
+              // Filtering logic
+              if (selectedServices && selectedServices.dhl && selectedServices.dhl.length > 0) {
+                // DHL service names from XML might be slightly different than our UI IDs, 
+                // but we used IDs like "EXPRESS WORLDWIDE" which match common DHL product names.
+                if (!selectedServices.dhl.includes(rate.service)) {
+                  return; // Skip if not in selected list
+                }
+              }
+
               outputRows.push({
                 ...baseRowData,
                 "Carrier": "DHL",
